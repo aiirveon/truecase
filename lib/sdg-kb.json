@@ -1,0 +1,383 @@
+{
+  "version": "1.0",
+  "last_verified": "April 2026",
+  "source_base_url": "https://sdgs.un.org/goals",
+  "sroi_caveat": "TrueCase SDG mapping is directional signal only. It is not an investment-grade SROI assessment. Organisations requiring formal SROI should commission a full assessment using the UK Cabinet Office SROI methodology.",
+  "mappings": [
+    {
+      "mapping_id": "individuals_financial_services",
+      "q1": "individuals",
+      "q4": "financial_services",
+      "primary_sdg": {
+        "number": 10,
+        "name": "Reduced Inequalities",
+        "target": "10.2",
+        "target_text": "By 2030, empower and promote the social, economic and political inclusion of all, irrespective of age, sex, disability, race, ethnicity, origin, religion or economic or other status",
+        "url": "https://sdgs.un.org/goals/goal10",
+        "level": "micro",
+        "connection": "AI credit and financial decisions that are explainable and contestable support equal access to financial services regardless of background. Without a decision audit trail and human review, automated financial decisions risk perpetuating the exclusions they were designed to remove."
+      },
+      "secondary_sdg": {
+        "number": 8,
+        "name": "Decent Work and Economic Growth",
+        "target": "8.10",
+        "target_text": "Strengthen the capacity of domestic financial institutions to encourage and expand access to banking, insurance and financial services for all",
+        "url": "https://sdgs.un.org/goals/goal8",
+        "level": "meso",
+        "connection": "Governed AI in financial services can broaden access to credit and insurance — but only when governance controls prevent the automation of historical exclusions."
+      },
+      "governance_dependencies": ["human_override", "explainability"],
+      "negative_condition": "Without a Human Review Requirement and Decision Audit Trail, this system risks automating financial exclusion at scale — directly contradicting SDG 10's intent."
+    },
+    {
+      "mapping_id": "individuals_media_broadcasting",
+      "q1": "individuals",
+      "q4": "media_broadcasting",
+      "primary_sdg": {
+        "number": 16,
+        "name": "Peace, Justice and Strong Institutions",
+        "target": "16.10",
+        "target_text": "Ensure public access to information and protect fundamental freedoms, in accordance with national legislation and international agreements",
+        "url": "https://sdgs.un.org/goals/goal16",
+        "level": "meso",
+        "connection": "AI content moderation systems that operate transparently and with human oversight support public access to information and protection of freedom of expression. Ungoverned automated moderation risks suppressing legitimate speech at scale."
+      },
+      "secondary_sdg": {
+        "number": 10,
+        "name": "Reduced Inequalities",
+        "target": "10.2",
+        "target_text": "By 2030, empower and promote the social, economic and political inclusion of all, irrespective of age, sex, disability, race, ethnicity, origin, religion or economic or other status",
+        "url": "https://sdgs.un.org/goals/goal10",
+        "level": "micro",
+        "connection": "Content moderation AI that disproportionately removes content from marginalised communities without explainable, contestable decisions undermines social and political inclusion."
+      },
+      "governance_dependencies": ["human_override", "explainability", "hard_output_cap"],
+      "negative_condition": "Without Human Review and a Decision Audit Trail, automated content decisions risk suppressing speech and undermining the public interest obligations SDG 16 protects."
+    },
+    {
+      "mapping_id": "individuals_healthcare",
+      "q1": "individuals",
+      "q4": "healthcare",
+      "primary_sdg": {
+        "number": 3,
+        "name": "Good Health and Well-Being",
+        "target": "3.8",
+        "target_text": "Achieve universal health coverage, including financial risk protection, access to quality essential health-care services and access to safe, effective, quality and affordable essential medicines and vaccines for all",
+        "url": "https://sdgs.un.org/goals/goal3",
+        "level": "micro",
+        "connection": "AI clinical decision support that includes documented human review and a decision audit trail supports safe, equitable health coverage."
+      },
+      "secondary_sdg": {
+        "number": 10,
+        "name": "Reduced Inequalities",
+        "target": "10.3",
+        "target_text": "Ensure equal opportunity and reduce inequalities of outcome, including by eliminating discriminatory laws, policies and practices",
+        "url": "https://sdgs.un.org/goals/goal10",
+        "level": "micro",
+        "connection": "Healthcare AI with documented system performance is more likely to perform equitably across patient populations."
+      },
+      "governance_dependencies": ["human_override", "explainability", "training_data_documented"],
+      "negative_condition": "Without Human Review, a Decision Audit Trail, and AI System Performance Documentation, this system risks encoding demographic biases into care decisions — directly contradicting SDG 3 and SDG 10."
+    },
+    {
+      "mapping_id": "individuals_recruitment_employment",
+      "q1": "individuals",
+      "q4": "recruitment_employment",
+      "primary_sdg": {
+        "number": 8,
+        "name": "Decent Work and Economic Growth",
+        "target": "8.5",
+        "target_text": "By 2030, achieve full and productive employment and decent work for all women and men, including for young people and persons with disabilities, and equal pay for work of equal value",
+        "url": "https://sdgs.un.org/goals/goal8",
+        "level": "micro",
+        "connection": "AI hiring and assessment tools with documented system performance, human review, and a decision audit trail support equal employment opportunity."
+      },
+      "secondary_sdg": {
+        "number": 10,
+        "name": "Reduced Inequalities",
+        "target": "10.2",
+        "target_text": "By 2030, empower and promote the social, economic and political inclusion of all, irrespective of age, sex, disability, race, ethnicity, origin, religion or economic or other status",
+        "url": "https://sdgs.un.org/goals/goal10",
+        "level": "micro",
+        "connection": "Explainable, contestable AI employment decisions reduce the risk that automated systems perpetuate exclusion of protected groups from economic participation."
+      },
+      "governance_dependencies": ["human_override", "explainability", "training_data_documented"],
+      "negative_condition": "Without Human Review, a Decision Audit Trail, and AI System Performance Documentation, this system risks encoding historical hiring discrimination — directly contradicting SDG 8 and SDG 10."
+    },
+    {
+      "mapping_id": "individuals_public_sector",
+      "q1": "individuals",
+      "q4": "public_sector",
+      "primary_sdg": {
+        "number": 16,
+        "name": "Peace, Justice and Strong Institutions",
+        "target": "16.6",
+        "target_text": "Develop effective, accountable and transparent institutions at all levels",
+        "url": "https://sdgs.un.org/goals/goal16",
+        "level": "meso",
+        "connection": "AI systems in public services with documented governance support accountable and transparent public institutions. Ungoverned public sector AI has been directly linked to unlawful automated decisions in UK local authorities."
+      },
+      "secondary_sdg": {
+        "number": 10,
+        "name": "Reduced Inequalities",
+        "target": "10.2",
+        "target_text": "By 2030, empower and promote the social, economic and political inclusion of all, irrespective of age, sex, disability, race, ethnicity, origin, religion or economic or other status",
+        "url": "https://sdgs.un.org/goals/goal10",
+        "level": "micro",
+        "connection": "Public sector AI that affects individuals' access to services must be explainable and contestable to support equal treatment under public law."
+      },
+      "governance_dependencies": ["human_override", "explainability", "regulation_identified"],
+      "negative_condition": "Without Human Review, a Decision Audit Trail, and a Regulatory Compliance Map, this system risks unlawful automated public decisions — directly contradicting SDG 16."
+    },
+    {
+      "mapping_id": "individuals_retail_ecommerce_ticketing",
+      "q1": "individuals",
+      "q4": "retail_ecommerce_ticketing",
+      "primary_sdg": {
+        "number": 10,
+        "name": "Reduced Inequalities",
+        "target": "10.4",
+        "target_text": "Adopt policies, especially fiscal, wage and social protection policies, and progressively achieve greater equality",
+        "url": "https://sdgs.un.org/goals/goal10",
+        "level": "micro",
+        "connection": "AI pricing systems with output limit controls prevent price surges from disproportionately excluding lower-income buyers. The CMA's 2024 investigation established uncapped AI pricing as a consumer harm concern."
+      },
+      "secondary_sdg": {
+        "number": 8,
+        "name": "Decent Work and Economic Growth",
+        "target": "8.2",
+        "target_text": "Achieve higher levels of economic productivity through diversification, technological upgrading and innovation",
+        "url": "https://sdgs.un.org/goals/goal8",
+        "level": "meso",
+        "connection": "Governed AI pricing supports sustainable economic activity in retail, e-commerce, and live events sectors."
+      },
+      "governance_dependencies": ["hard_output_cap", "regulation_identified"],
+      "negative_condition": "Without an Output Limit Control and Regulatory Compliance Map, this system risks triggering CMA enforcement action — undermining rather than supporting SDG 10."
+    },
+    {
+      "mapping_id": "individuals_technology_platform",
+      "q1": "individuals",
+      "q4": "technology_platform",
+      "primary_sdg": {
+        "number": 16,
+        "name": "Peace, Justice and Strong Institutions",
+        "target": "16.10",
+        "target_text": "Ensure public access to information and protect fundamental freedoms, in accordance with national legislation and international agreements",
+        "url": "https://sdgs.un.org/goals/goal16",
+        "level": "macro",
+        "connection": "AI systems on technology platforms that affect what individuals see or access require governance controls to protect public access to information and freedom of expression at scale."
+      },
+      "secondary_sdg": {
+        "number": 10,
+        "name": "Reduced Inequalities",
+        "target": "10.2",
+        "target_text": "By 2030, empower and promote the social, economic and political inclusion of all, irrespective of age, sex, disability, race, ethnicity, origin, religion or economic or other status",
+        "url": "https://sdgs.un.org/goals/goal10",
+        "level": "micro",
+        "connection": "Platform AI with human review and decision audit trails reduces the risk of algorithmic exclusion of marginalised communities."
+      },
+      "governance_dependencies": ["human_override", "explainability", "hard_output_cap"],
+      "negative_condition": "Without Output Limit Control, Human Review, and a Decision Audit Trail, platform AI risks suppressing access to information at scale — directly contradicting SDG 16."
+    },
+    {
+      "mapping_id": "individuals_other",
+      "q1": "individuals",
+      "q4": "other",
+      "primary_sdg": {
+        "number": 10,
+        "name": "Reduced Inequalities",
+        "target": "10.2",
+        "target_text": "By 2030, empower and promote the social, economic and political inclusion of all, irrespective of age, sex, disability, race, ethnicity, origin, religion or economic or other status",
+        "url": "https://sdgs.un.org/goals/goal10",
+        "level": "micro",
+        "connection": "AI systems that make decisions affecting individuals with documented governance reduce the risk that automation perpetuates or amplifies existing inequalities."
+      },
+      "secondary_sdg": {
+        "number": 16,
+        "name": "Peace, Justice and Strong Institutions",
+        "target": "16.6",
+        "target_text": "Develop effective, accountable and transparent institutions at all levels",
+        "url": "https://sdgs.un.org/goals/goal16",
+        "level": "meso",
+        "connection": "Governed AI decision-making supports the development of accountable institutions and processes."
+      },
+      "governance_dependencies": ["human_override", "explainability"],
+      "negative_condition": "Without Human Review and a Decision Audit Trail, this system risks automating decisions that harm individuals without recourse — contradicting SDG 10 and SDG 16."
+    },
+    {
+      "mapping_id": "organisations_financial_services",
+      "q1": "organisations",
+      "q4": "financial_services",
+      "primary_sdg": {
+        "number": 8,
+        "name": "Decent Work and Economic Growth",
+        "target": "8.10",
+        "target_text": "Strengthen the capacity of domestic financial institutions to encourage and expand access to banking, insurance and financial services for all",
+        "url": "https://sdgs.un.org/goals/goal8",
+        "level": "meso",
+        "connection": "AI risk and market analysis tools with documented governance support stronger, more reliable financial institutions and broader market access."
+      },
+      "secondary_sdg": {
+        "number": 9,
+        "name": "Industry, Innovation and Infrastructure",
+        "target": "9.5",
+        "target_text": "Enhance scientific research, upgrade the technological capabilities of industrial sectors in all countries",
+        "url": "https://sdgs.un.org/goals/goal9",
+        "level": "macro",
+        "connection": "Governed AI investment in financial services supports sustainable technological innovation in a regulated sector."
+      },
+      "governance_dependencies": ["hard_output_cap", "regulation_identified"],
+      "negative_condition": "Without an Output Limit Control and Regulatory Compliance Map, this system has unquantified regulatory exposure that undermines its projected contribution to SDG 8."
+    },
+    {
+      "mapping_id": "organisations_real_estate",
+      "q1": "organisations",
+      "q4": "real_estate",
+      "primary_sdg": {
+        "number": 11,
+        "name": "Sustainable Cities and Communities",
+        "target": "11.3",
+        "target_text": "By 2030, enhance inclusive and sustainable urbanization and capacity for participatory, integrated and sustainable human settlement planning and management in all countries",
+        "url": "https://sdgs.un.org/goals/goal11",
+        "level": "meso",
+        "connection": "AI land and property analysis tools with documented governance support transparent, evidence-based property investment decisions that contribute to sustainable urban planning."
+      },
+      "secondary_sdg": {
+        "number": 10,
+        "name": "Reduced Inequalities",
+        "target": "10.2",
+        "target_text": "By 2030, empower and promote the social, economic and political inclusion of all, irrespective of age, sex, disability, race, ethnicity, origin, religion or economic or other status",
+        "url": "https://sdgs.un.org/goals/goal10",
+        "level": "macro",
+        "connection": "AI property tools with documented system performance help mitigate the risk of concentrating investment in already-advantaged areas."
+      },
+      "governance_dependencies": ["training_data_documented", "hard_output_cap"],
+      "negative_condition": "Without AI System Performance Documentation and Output Limit Controls, this system risks amplifying spatial inequality — contradicting SDG 11 and SDG 10."
+    },
+    {
+      "mapping_id": "organisations_media_broadcasting",
+      "q1": "organisations",
+      "q4": "media_broadcasting",
+      "primary_sdg": {
+        "number": 16,
+        "name": "Peace, Justice and Strong Institutions",
+        "target": "16.10",
+        "target_text": "Ensure public access to information and protect fundamental freedoms, in accordance with national legislation and international agreements",
+        "url": "https://sdgs.un.org/goals/goal16",
+        "level": "macro",
+        "connection": "AI editorial and distribution tools in broadcasting with documented governance support the public interest obligations that underpin free and fair media."
+      },
+      "secondary_sdg": {
+        "number": 9,
+        "name": "Industry, Innovation and Infrastructure",
+        "target": "9.5",
+        "target_text": "Enhance scientific research, upgrade the technological capabilities of industrial sectors",
+        "url": "https://sdgs.un.org/goals/goal9",
+        "level": "meso",
+        "connection": "Governed AI investment in media production and distribution supports sustainable innovation in the creative industries."
+      },
+      "governance_dependencies": ["regulation_identified", "hard_output_cap"],
+      "negative_condition": "Without a Regulatory Compliance Map and Output Limit Control, this system has unaddressed Online Safety Act and Ofcom obligations that undermine its SDG 16 claim."
+    },
+    {
+      "mapping_id": "organisations_retail_ecommerce_ticketing",
+      "q1": "organisations",
+      "q4": "retail_ecommerce_ticketing",
+      "primary_sdg": {
+        "number": 8,
+        "name": "Decent Work and Economic Growth",
+        "target": "8.2",
+        "target_text": "Achieve higher levels of economic productivity through diversification, technological upgrading and innovation",
+        "url": "https://sdgs.un.org/goals/goal8",
+        "level": "meso",
+        "connection": "AI market tools in retail with documented governance support productive economic activity and sustainable commercial innovation."
+      },
+      "secondary_sdg": {
+        "number": 10,
+        "name": "Reduced Inequalities",
+        "target": "10.4",
+        "target_text": "Adopt policies, especially fiscal, wage and social protection policies, and progressively achieve greater equality",
+        "url": "https://sdgs.un.org/goals/goal10",
+        "level": "macro",
+        "connection": "Market-level AI pricing tools with output limit controls prevent algorithmic price coordination that could harm consumers and small businesses."
+      },
+      "governance_dependencies": ["hard_output_cap", "regulation_identified"],
+      "negative_condition": "Without Output Limit Control and Regulatory Compliance Map, this system has CMA exposure that undermines its SDG 8 contribution."
+    },
+    {
+      "mapping_id": "organisations_other",
+      "q1": "organisations",
+      "q4": "other",
+      "primary_sdg": {
+        "number": 9,
+        "name": "Industry, Innovation and Infrastructure",
+        "target": "9.5",
+        "target_text": "Enhance scientific research, upgrade the technological capabilities of industrial sectors in all countries",
+        "url": "https://sdgs.un.org/goals/goal9",
+        "level": "meso",
+        "connection": "AI systems supporting organisational decisions with documented governance contribute to sustainable technological innovation."
+      },
+      "secondary_sdg": {
+        "number": 8,
+        "name": "Decent Work and Economic Growth",
+        "target": "8.2",
+        "target_text": "Achieve higher levels of economic productivity through diversification, technological upgrading and innovation",
+        "url": "https://sdgs.un.org/goals/goal8",
+        "level": "meso",
+        "connection": "Governed AI investment in organisational decision-making supports productive economic activity and responsible innovation."
+      },
+      "governance_dependencies": ["training_data_documented", "regulation_identified"],
+      "negative_condition": "Without AI System Performance Documentation and a Regulatory Compliance Map, projected SDG contributions are not supported by the governance conditions required to deliver them."
+    },
+    {
+      "mapping_id": "internal_all_sectors",
+      "q1": "internal",
+      "q4": "all",
+      "primary_sdg": {
+        "number": 8,
+        "name": "Decent Work and Economic Growth",
+        "target": "8.2",
+        "target_text": "Achieve higher levels of economic productivity through diversification, technological upgrading and innovation, including through a focus on high value added and labour-intensive sectors",
+        "url": "https://sdgs.un.org/goals/goal8",
+        "level": "meso",
+        "connection": "Internal AI automation with documented system performance supports productive economic activity without the risk of undocumented performance degradation offsetting projected gains."
+      },
+      "secondary_sdg": {
+        "number": 9,
+        "name": "Industry, Innovation and Infrastructure",
+        "target": "9.5",
+        "target_text": "Enhance scientific research, upgrade the technological capabilities of industrial sectors in all countries",
+        "url": "https://sdgs.un.org/goals/goal9",
+        "level": "meso",
+        "connection": "Internal AI tools with governed deployment contribute to sustainable technological capability-building."
+      },
+      "governance_dependencies": ["training_data_documented"],
+      "negative_condition": "Without AI System Performance Documentation, projected productivity gains from this system have no documented basis for persistence over the ROI projection period."
+    },
+    {
+      "mapping_id": "automation_all_sectors",
+      "q1": "automation",
+      "q4": "all",
+      "primary_sdg": {
+        "number": 8,
+        "name": "Decent Work and Economic Growth",
+        "target": "8.2",
+        "target_text": "Achieve higher levels of economic productivity through diversification, technological upgrading and innovation",
+        "url": "https://sdgs.un.org/goals/goal8",
+        "level": "meso",
+        "connection": "Process automation AI with documented governance supports sustainable productivity improvement without perpetuating inefficiencies from the processes being automated."
+      },
+      "secondary_sdg": {
+        "number": 9,
+        "name": "Industry, Innovation and Infrastructure",
+        "target": "9.4",
+        "target_text": "By 2030, upgrade infrastructure and retrofit industries to make them sustainable, with increased resource-use efficiency and greater adoption of clean and environmentally sound technologies",
+        "url": "https://sdgs.un.org/goals/goal9",
+        "level": "meso",
+        "connection": "Governed AI process automation contributes to the sustainable modernisation of organisational processes."
+      },
+      "governance_dependencies": ["training_data_documented"],
+      "negative_condition": "Without AI System Performance Documentation, this automation may perpetuate the errors or inefficiencies of the process it replaces — with no mechanism to detect this until outcomes degrade."
+    }
+  ]
+}

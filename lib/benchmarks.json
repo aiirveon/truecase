@@ -1,0 +1,174 @@
+{
+  "version": "1.0",
+  "last_verified": "April 2026",
+  "note": "Only verified or partially-verified benchmarks are included. Unverified fields show guidance text only. Every figure traces to a primary source.",
+  "fine_exposure": {
+    "field_id": "fine_exposure",
+    "label": "Estimated Regulatory Fine Exposure",
+    "description": "Maximum regulatory penalty applicable to your sector",
+    "guidance": "Enter the maximum penalty your AI system could face under applicable regulation. Use 0 if no regulatory penalty applies.",
+    "sectors": {
+      "media_broadcasting": {
+        "label": "Online Safety Act 2023 maximum",
+        "value": 18000000,
+        "display": "£18,000,000 or 10% global turnover",
+        "unit": "GBP",
+        "source": "Online Safety Act 2023 — Section 83",
+        "source_url": "https://www.legislation.gov.uk/ukpga/2023/50/section/83",
+        "verified": true
+      },
+      "technology_platform": {
+        "label": "Online Safety Act 2023 maximum",
+        "value": 18000000,
+        "display": "£18,000,000 or 10% global turnover",
+        "unit": "GBP",
+        "source": "Online Safety Act 2023 — Section 83",
+        "source_url": "https://www.legislation.gov.uk/ukpga/2023/50/section/83",
+        "verified": true
+      },
+      "financial_services": {
+        "label": "FCA — no statutory cap, typical enforcement range",
+        "value": 10000000,
+        "display": "£1M — £50M+ (no statutory cap)",
+        "unit": "GBP",
+        "source": "FCA — Enforcement Annual Performance Report 2022-23",
+        "source_url": "https://www.fca.org.uk/publications/annual-reports/enforcement-annual-performance-report-2022-23",
+        "verified": true
+      },
+      "retail_ecommerce_ticketing": {
+        "label": "CMA maximum — Competition Act 1998",
+        "value": 0,
+        "display": "Up to 10% of global annual turnover",
+        "unit": "percentage_turnover",
+        "source": "CMA — Guidance on the Appropriate Amount of a Penalty",
+        "source_url": "https://www.gov.uk/government/publications/guidance-on-the-appropriate-amount-of-a-penalty",
+        "verified": true
+      },
+      "healthcare": {
+        "label": "CQC enforcement — Health and Social Care Act 2008",
+        "value": 2000000,
+        "display": "£50,000 — £2,000,000+ for systemic failures",
+        "unit": "GBP",
+        "source": "CQC — Enforcement Policy",
+        "source_url": "https://www.cqc.org.uk/guidance-providers/enforcement-powers/enforcement-policy",
+        "verified": true
+      },
+      "public_sector": {
+        "label": "UK GDPR maximum",
+        "value": 17500000,
+        "display": "£17,500,000 or 4% of global annual turnover",
+        "unit": "GBP",
+        "source": "ICO — Guide to GDPR: Enforcement",
+        "source_url": "https://ico.org.uk/for-organisations/guide-to-data-protection/guide-to-the-general-data-protection-regulation-gdpr/accountability-and-governance/guide-to-enforcement/",
+        "verified": true
+      },
+      "recruitment_employment": {
+        "label": "UK GDPR maximum",
+        "value": 17500000,
+        "display": "£17,500,000 or 4% of global annual turnover",
+        "unit": "GBP",
+        "source": "ICO — Guide to GDPR: Enforcement",
+        "source_url": "https://ico.org.uk/for-organisations/guide-to-data-protection/guide-to-the-general-data-protection-regulation-gdpr/accountability-and-governance/guide-to-enforcement/",
+        "verified": true
+      },
+      "real_estate": {
+        "label": "CMA maximum — Competition Act 1998",
+        "value": 0,
+        "display": "Up to 10% of global annual turnover",
+        "unit": "percentage_turnover",
+        "source": "CMA — Guidance on the Appropriate Amount of a Penalty",
+        "source_url": "https://www.gov.uk/government/publications/guidance-on-the-appropriate-amount-of-a-penalty",
+        "verified": true
+      },
+      "other": {
+        "label": "UK GDPR maximum (if personal data used)",
+        "value": 17500000,
+        "display": "£17,500,000 or 4% of global annual turnover",
+        "unit": "GBP",
+        "source": "ICO — Guide to GDPR: Enforcement",
+        "source_url": "https://ico.org.uk/for-organisations/guide-to-data-protection/guide-to-the-general-data-protection-regulation-gdpr/accountability-and-governance/guide-to-enforcement/",
+        "verified": true
+      }
+    }
+  },
+  "efficiency_gain": {
+    "field_id": "efficiency_gain",
+    "label": "Expected Efficiency Gain from AI %",
+    "description": "Percentage reduction in cost or time for this process",
+    "guidance": "Enter the percentage reduction in staff time or operational cost you expect from AI automation.",
+    "general_benchmark": {
+      "label": "Typical AI implementation range",
+      "low": 15,
+      "high": 40,
+      "unit": "percent",
+      "source": "Google Cloud — Business Impacts of Machine Learning (cited in Reliable Machine Learning, O'Reilly 2022)",
+      "source_url": "https://cloud.google.com/resources/business-impacts-of-machine-learning",
+      "verified": false,
+      "verified_note": "Secondary citation — treat as directional range only"
+    },
+    "sectors": {
+      "media_broadcasting": {
+        "label": "Content moderation — automated review tools",
+        "low": 15,
+        "high": 40,
+        "unit": "percent",
+        "source": "Ofcom — Online Safety Act Compliance Costs Research 2023",
+        "source_url": "https://www.ofcom.org.uk/research-and-data/telecoms-research/online-safety/online-safety-act-research",
+        "verified": false,
+        "verified_note": "Ofcom documents efficiency potential — figures are illustrative ranges"
+      },
+      "financial_services": {
+        "label": "AI-augmented compliance and fraud detection",
+        "low": 20,
+        "high": 50,
+        "unit": "percent",
+        "source": "FCA — Artificial Intelligence in Financial Services Research Note 2022",
+        "source_url": "https://www.fca.org.uk/publications/research/research-note-artificial-intelligence-financial-services",
+        "verified": false,
+        "verified_note": "FCA research note — figures are illustrative ranges not primary data"
+      }
+    }
+  },
+  "error_reduction": {
+    "field_id": "error_reduction",
+    "label": "Expected Error or Risk Reduction %",
+    "description": "Percentage reduction in errors, false positives, or risk events",
+    "guidance": "Enter the percentage reduction in errors, harmful decisions, or risk events you expect from AI.",
+    "sectors": {
+      "financial_services": {
+        "label": "Fraud detection — AI-augmented systems",
+        "low": 30,
+        "high": 70,
+        "unit": "percent",
+        "source": "FCA — Artificial Intelligence in Financial Services Research Note 2022",
+        "source_url": "https://www.fca.org.uk/publications/research/research-note-artificial-intelligence-financial-services",
+        "verified": false,
+        "verified_note": "FCA research note — figures are illustrative ranges"
+      },
+      "media_broadcasting": {
+        "label": "Content moderation — false positive reduction",
+        "low": 20,
+        "high": 60,
+        "unit": "percent",
+        "source": "Ofcom — Online Safety Act Compliance Costs Research 2023",
+        "source_url": "https://www.ofcom.org.uk/research-and-data/telecoms-research/online-safety/online-safety-act-research",
+        "verified": false,
+        "verified_note": "Ofcom documents error reduction potential — illustrative range"
+      }
+    }
+  },
+  "current_annual_cost": {
+    "field_id": "current_annual_cost",
+    "label": "Current Annual Cost of This Process",
+    "description": "What you spend today on the process this AI system will automate or augment",
+    "guidance": "Include all staff time, tooling, outsourcing, and process costs for this function today. No benchmark is shown for this field — the figure should come from your own cost data.",
+    "sectors": {}
+  },
+  "ai_system_cost": {
+    "field_id": "ai_system_cost",
+    "label": "AI System Annual Cost",
+    "description": "Total annual cost of the AI system including all licensing, infrastructure, maintenance, and monitoring",
+    "guidance": "Include licensing fees, cloud infrastructure, monitoring tools, and internal engineering time. No benchmark is shown for this field — costs vary significantly by build vs buy and scale.",
+    "sectors": {}
+  }
+}

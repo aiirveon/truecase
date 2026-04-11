@@ -1,0 +1,258 @@
+{
+  "version": "1.0",
+  "last_verified": "April 2026",
+  "elements": [
+    {
+      "element_id": "hard_output_cap",
+      "name": "Output Limit Control",
+      "plain_english": "Is there a hard, non-configurable maximum on the AI system's output that cannot be bypassed by any input, configuration, or user action?",
+      "why_it_matters": "Uncapped AI outputs are the primary mechanism by which algorithmic systems have triggered regulatory enforcement in the UK. The CMA's 2024 review of dynamic pricing established that algorithmic price-setting without transparent limits may constitute consumer harm. The same principle applies to content moderation systems with no removal ceiling, credit scoring with no floor, and any AI system producing unbounded outputs affecting individuals or markets.",
+      "what_confirmed_means": "A hard, non-configurable maximum exists in the system architecture — not just in policy. It cannot be bypassed by any input, user, or configuration change.",
+      "what_partial_means": "A limit exists in policy or documentation but is not technically enforced in the system. Regulators assess technical controls, not written policies.",
+      "what_missing_means": "No output limit exists. A single uncapped event can trigger regulatory investigation.",
+      "regulatory_anchors": [
+        {
+          "regulation": "CMA — Pricing Practices in the Live Music and Sports Event Ticketing Sector",
+          "clause": "Review findings, 2024",
+          "url": "https://www.gov.uk/government/publications/pricing-practices-in-the-live-music-and-sports-event-ticketing-sector",
+          "plain_english": "The CMA found that drip pricing and dynamic pricing without transparent consumer controls may breach consumer protection law",
+          "sector_priority": ["retail_ecommerce_ticketing", "media_broadcasting"]
+        },
+        {
+          "regulation": "Consumer Rights Act 2015",
+          "clause": "Section 62 — Unfair Terms",
+          "url": "https://www.legislation.gov.uk/ukpga/2015/15/section/62",
+          "plain_english": "A term is unfair if it creates a significant imbalance in the parties' rights and obligations to the detriment of the consumer",
+          "sector_priority": ["retail_ecommerce_ticketing", "financial_services", "all"]
+        },
+        {
+          "regulation": "Online Safety Act 2023",
+          "clause": "Section 12 — Duty of care for user-to-user services",
+          "url": "https://www.legislation.gov.uk/ukpga/2023/50/section/12",
+          "plain_english": "Regulated services must take proportionate steps to mitigate risks of harm — uncapped automated content removal or amplification without human review thresholds may fail this duty",
+          "sector_priority": ["media_broadcasting", "technology_platform"]
+        }
+      ],
+      "consequence_if_missing": "A single uncapped output event — a pricing surge, a content removal cascade, an automated credit refusal at scale — can trigger CMA, ICO, or FCA investigation. Regulatory investigation costs, legal defence, and enforcement penalties are not included in any ROI projection that does not account for this governance gap.",
+      "consequence_if_partial": "A soft cap exists in policy but is not enforced in the system architecture. Regulators assess technical controls, not policy documents. A policy-only cap provides limited protection in an enforcement context.",
+      "reliability_reduction_missing": 25,
+      "reliability_reduction_partial": 12,
+      "applicable_to": ["all"],
+      "sectors": ["all"]
+    },
+    {
+      "element_id": "human_override",
+      "name": "Human Review Requirement",
+      "plain_english": "Is there a documented requirement that no AI recommendation takes effect without explicit human approval, enforced in the system architecture — not just stated in policy?",
+      "why_it_matters": "GDPR Article 22 establishes a right not to be subject to solely automated decisions that produce legal or similarly significant effects. This is an enforceable right, not a soft principle. If an AI system takes real-world action affecting individuals without a documented human approval step, the organisation is exposed to subject access requests, ICO enforcement, and compensation claims under GDPR Article 82.",
+      "what_confirmed_means": "No AI recommendation takes effect without a documented, enforced human approval step. This is built into the system architecture.",
+      "what_partial_means": "Human review exists in practice but is not consistently enforced or documented in the system. Spot compliance does not satisfy ICO audit requirements.",
+      "what_missing_means": "Automated decisions take effect without human review. This creates direct exposure under GDPR Article 22.",
+      "regulatory_anchors": [
+        {
+          "regulation": "UK GDPR — Article 22",
+          "clause": "Article 22(1) — Automated individual decision-making including profiling",
+          "url": "https://uk-gdpr.org/chapter-3-article-22/",
+          "plain_english": "The data subject has the right not to be subject to a decision based solely on automated processing which produces legal effects or similarly significantly affects them",
+          "sector_priority": ["all"]
+        },
+        {
+          "regulation": "UK Data Protection Act 2018",
+          "clause": "Schedule 1 Part 2 — Substantial public interest conditions",
+          "url": "https://www.legislation.gov.uk/ukpga/2018/12/schedule/1",
+          "plain_english": "Sets conditions under which automated decisions involving special category data may be made — human review is required in most circumstances",
+          "sector_priority": ["all"]
+        },
+        {
+          "regulation": "ICO — Guidance on Automated Decision-Making and Profiling",
+          "clause": "How to comply with UK GDPR in automated decision-making",
+          "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/guidance-on-ai-and-data-protection/how-should-we-approach-automated-decision-making-and-profiling/",
+          "plain_english": "Organisations must implement suitable measures to safeguard data subjects' rights when making solely automated decisions, including the right to obtain human intervention",
+          "sector_priority": ["all"]
+        }
+      ],
+      "consequence_if_missing": "Any individual affected by an automated AI decision can exercise their Article 22 right — requiring the organisation to review and potentially reverse that decision, document the reasoning, and respond within one month under Article 12(3). At scale, mandatory review obligations partially or fully offset the projected efficiency gain.",
+      "consequence_if_partial": "Human override exists but is not consistently enforced or documented. Spot-check compliance may satisfy policy but will not satisfy ICO audit requirements, which assess systemic implementation, not individual instances.",
+      "reliability_reduction_missing": 20,
+      "reliability_reduction_partial": 10,
+      "applicable_to": ["decisions_affecting_individuals"],
+      "sectors": ["all"]
+    },
+    {
+      "element_id": "explainability",
+      "name": "Decision Audit Trail",
+      "plain_english": "Can you produce a documented explanation of any individual AI decision — in plain English, attributed to specific input factors — within 24 hours of a regulatory or legal request?",
+      "why_it_matters": "GDPR Article 22(3) requires organisations making solely automated decisions to implement suitable measures including the ability to obtain human intervention and to contest the decision. The ICO's guidance is explicit: organisations must be able to explain the rationale behind an automated decision to the data subject. Without a technical explainability mechanism, this obligation cannot be met.",
+      "what_confirmed_means": "A documented mechanism exists — built into the system — that generates a per-decision explanation attributing the outcome to specific inputs. Non-technical staff can access it within 24 hours.",
+      "what_partial_means": "A general model explanation exists but not a per-decision explanation. Or a mechanism exists but is not documented or accessible within a response timeframe.",
+      "what_missing_means": "No mechanism exists to explain why a specific individual decision was made. This prevents responding to regulatory or legal requests for explanation.",
+      "technical_standard": "A decision audit trail means a per-decision record — not a general description of how the model works. The explanation must attribute the specific outcome to specific input factors. This is what the ICO's guidance on automated decision-making requires.",
+      "regulatory_anchors": [
+        {
+          "regulation": "UK GDPR — Article 22(3)",
+          "clause": "Article 22(3) — Right to explanation for automated decisions",
+          "url": "https://uk-gdpr.org/chapter-3-article-22/",
+          "plain_english": "The controller shall implement suitable measures to safeguard the data subject's rights, including the right to obtain human intervention, to express their point of view, and to contest the decision",
+          "sector_priority": ["all"]
+        },
+        {
+          "regulation": "ICO — Guide to AI and Data Protection: Explaining AI Decisions",
+          "clause": "How to explain AI-assisted decisions",
+          "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/guidance-on-ai-and-data-protection/explaining-ai-decisions-made-with-personal-data/",
+          "plain_english": "Organisations should be able to explain AI-assisted decisions to individuals in meaningful terms and are recommended to implement technical explainability tools",
+          "sector_priority": ["all"]
+        },
+        {
+          "regulation": "Online Safety Act 2023",
+          "clause": "Section 70 — Transparency Reports",
+          "url": "https://www.legislation.gov.uk/ukpga/2023/50/section/70",
+          "plain_english": "Regulated services must publish transparency reports including information about automated tools — implicitly requiring the ability to explain what those tools do and why",
+          "sector_priority": ["media_broadcasting", "technology_platform"]
+        },
+        {
+          "regulation": "EU AI Act 2024",
+          "clause": "Article 13 — Transparency for High-Risk AI Systems",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689",
+          "plain_english": "High-risk AI systems must be designed with sufficient transparency to enable deployers to interpret and appropriately use the system's output",
+          "sector_priority": ["financial_services", "healthcare", "recruitment_employment", "public_sector"]
+        }
+      ],
+      "consequence_if_missing": "Without explainability, the organisation cannot respond to a GDPR Article 22 request for explanation. It cannot produce the transparency reports required under the Online Safety Act. Legal defence costs when challenged on an unexplained automated decision — ICO investigation, judicial review, compensation claim — are unquantified and not included in any ROI projection.",
+      "consequence_if_partial": "An explainability mechanism exists but is not documented or accessible within a response timeframe. ICO enforcement assesses whether explanations can be produced on demand, not whether the technical capability exists in theory.",
+      "reliability_reduction_missing": 15,
+      "reliability_reduction_partial": 7,
+      "applicable_to": ["decisions_affecting_individuals"],
+      "sectors": ["all"]
+    },
+    {
+      "element_id": "regulation_identified",
+      "name": "Regulatory Compliance Map",
+      "plain_english": "Have you identified which UK regulations apply to this AI system and documented how the system addresses each one — with legal review?",
+      "why_it_matters": "The UK regulatory landscape for AI is fragmented across multiple regimes. A dynamic pricing system may be subject to CMA guidance. A content moderation tool is subject to the Online Safety Act. A broadcast AI tool is subject to the Ofcom Broadcasting Code. A system using personal data is subject to UK GDPR. Most organisations identify one or two applicable regulations and miss the others — creating unquantified legal exposure that does not appear in any financial model.",
+      "what_confirmed_means": "All applicable UK regulations have been identified, documented, and reviewed by legal counsel. The system has a documented response to each applicable framework.",
+      "what_partial_means": "Some applicable regulations have been identified but the assessment is incomplete or has not been reviewed by legal counsel.",
+      "what_missing_means": "No regulatory mapping exists. The ROI projection assumes no regulatory incident with no documented basis for that assumption.",
+      "regulatory_anchors": [
+        {
+          "regulation": "ICO — AI Auditing Framework",
+          "clause": "Explaining decisions made with AI",
+          "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/explaining-decisions-made-with-ai/",
+          "plain_english": "A structured framework for organisations to assess whether their AI systems comply with UK data protection law",
+          "sector_priority": ["all"]
+        },
+        {
+          "regulation": "UK Government — AI Regulation: A Pro-Innovation Approach (DSIT)",
+          "clause": "White Paper, 2023",
+          "url": "https://www.gov.uk/government/publications/ai-regulation-a-pro-innovation-approach/white-paper",
+          "plain_english": "UK government policy: existing sector regulators apply their remit to AI — every AI system is subject to the regulations of its sector regulator in addition to cross-cutting frameworks",
+          "sector_priority": ["all"]
+        },
+        {
+          "regulation": "Online Safety Act 2023",
+          "clause": "Part 2 — Duties of Care",
+          "url": "https://www.legislation.gov.uk/ukpga/2023/50/part/2",
+          "plain_english": "Regulated user-to-user services and search services have statutory duties of care — AI systems used by these services must comply",
+          "sector_priority": ["media_broadcasting", "technology_platform"]
+        },
+        {
+          "regulation": "Ofcom Broadcasting Code",
+          "clause": "Section 5 (Due Impartiality) and Section 7 (Fairness)",
+          "url": "https://www.ofcom.org.uk/tv-radio-and-on-demand/broadcast-codes/broadcast-code",
+          "plain_english": "AI tools used in broadcast production that influence editorial decisions must be consistent with the Code's requirements",
+          "sector_priority": ["media_broadcasting"]
+        },
+        {
+          "regulation": "EU AI Act 2024",
+          "clause": "Article 6 — Classification of High-Risk AI Systems",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689",
+          "plain_english": "AI systems in employment, education, credit, essential services, law enforcement, and migration are classified as high-risk with additional compliance requirements",
+          "sector_priority": ["financial_services", "healthcare", "recruitment_employment", "public_sector"]
+        }
+      ],
+      "consequence_if_missing": "Unidentified regulatory exposure is unquantified cost. The ROI projection assumes no regulatory incident — an assumption with no documented basis if the applicable regulatory framework has not been identified and assessed. A regulatory breach discovered post-deployment will cost significantly more than pre-deployment compliance work.",
+      "consequence_if_partial": "Some applicable regulations have been identified but the assessment is incomplete or has not been reviewed by legal counsel. Partial regulatory mapping creates the illusion of compliance without the substance.",
+      "reliability_reduction_missing": 20,
+      "reliability_reduction_partial": 10,
+      "applicable_to": ["all"],
+      "sectors": ["all"]
+    },
+    {
+      "element_id": "training_data_documented",
+      "name": "AI System Performance Documentation",
+      "plain_english": "Is there a written document stating where the training data came from, what distributional assumptions were made, what the known limitations are, and how model drift will be detected?",
+      "why_it_matters": "The Amazon Recruitment Tool failure (2018), the NHS AI Deterioration Tool underperformance (2020), and multiple UK local authority benefits AI failures share the same root cause: undocumented training data assumptions. The model performed exactly as trained. The training data did not represent the deployment population. Without documentation of what the training data represents, model drift is invisible until it has already caused harm — and the ROI projection assumed performance that was never achievable in deployment.",
+      "what_confirmed_means": "A written document exists recording the training data source, what it represents, known limitations, and a defined process for detecting performance degradation after deployment.",
+      "what_partial_means": "Some training data is documented but performance monitoring after deployment has not been implemented.",
+      "what_missing_means": "Training data assumptions are not documented. Performance degradation after deployment will not be detected until it manifests in outcomes.",
+      "regulatory_anchors": [
+        {
+          "regulation": "UK GDPR — Article 5(1)(b)",
+          "clause": "Article 5(1)(b) — Purpose Limitation",
+          "url": "https://uk-gdpr.org/chapter-2-article-5/",
+          "plain_english": "Personal data shall be collected for specified, explicit and legitimate purposes and not further processed in a manner incompatible with those purposes",
+          "sector_priority": ["all"]
+        },
+        {
+          "regulation": "ICO — Guide to AI and Data Protection",
+          "clause": "What do we need to consider when using AI",
+          "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/guidance-on-ai-and-data-protection/what-do-we-need-to-consider-when-using-ai/",
+          "plain_english": "Organisations should document the provenance and limitations of training data as part of their data protection by design obligations",
+          "sector_priority": ["all"]
+        },
+        {
+          "regulation": "EU AI Act 2024",
+          "clause": "Article 10 — Data and Data Governance for High-Risk AI",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689",
+          "plain_english": "Training, validation, and testing data sets shall be subject to appropriate data governance practices including documentation of provenance, scope, and known limitations",
+          "sector_priority": ["financial_services", "healthcare", "recruitment_employment", "public_sector"]
+        }
+      ],
+      "consequence_if_missing": "The ROI projection assumes the model performs at its current level for the full projection period. That assumption has no documented basis if training data assumptions have not been recorded. Model drift will not be detected until it manifests in business outcomes. The time between performance degradation and detection is the period during which the ROI projection is most inaccurate.",
+      "consequence_if_partial": "Some training data is documented but drift detection has not been implemented. Documentation without monitoring means degradation is recorded but not caught in time to prevent it affecting projected returns.",
+      "reliability_reduction_missing": 10,
+      "reliability_reduction_partial": 5,
+      "applicable_to": ["all"],
+      "sectors": ["all"]
+    },
+    {
+      "element_id": "personalisation_boundary",
+      "name": "Data Use Boundary",
+      "plain_english": "If this system collects or acts on individual behavioural data, is there a written policy — reviewed by legal — defining where personalisation ends and surveillance begins?",
+      "why_it_matters": "AI personalisation and surveillance are the same data collection activity described from two angles. The more accurate the personalisation, the more detailed the profiling required to power it. GDPR Article 22 and the ICO's profiling guidance are explicit: if an AI system builds profiles of individuals based on their behaviour and uses those profiles to influence decisions affecting them, this constitutes automated profiling and the Article 22 protections apply.",
+      "what_confirmed_means": "A written policy exists, reviewed by legal counsel, that defines the boundary between personalisation and profiling — and has been assessed against GDPR Article 22 and ICO profiling guidance.",
+      "what_partial_means": "A boundary definition exists but has not been reviewed by legal counsel or assessed against GDPR Article 22.",
+      "what_missing_means": "No documented boundary exists. Data practices operate in a legal grey area with unquantified ICO enforcement exposure.",
+      "regulatory_anchors": [
+        {
+          "regulation": "UK GDPR — Article 22",
+          "clause": "Article 22 — Profiling and Automated Decision-Making",
+          "url": "https://uk-gdpr.org/chapter-3-article-22/",
+          "plain_english": "The right not to be subject to solely automated decisions extends to decisions based on profiling — defined as automated processing of personal data to evaluate personal aspects",
+          "sector_priority": ["all"]
+        },
+        {
+          "regulation": "ICO — Guidance on Profiling and Automated Decision-Making",
+          "clause": "How to comply with UK GDPR in profiling",
+          "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/guidance-on-ai-and-data-protection/how-should-we-approach-automated-decision-making-and-profiling/",
+          "plain_english": "Organisations must identify whether their processing constitutes profiling, assess the risks, and implement appropriate safeguards including documenting the basis on which individual profiles are built",
+          "sector_priority": ["all"]
+        },
+        {
+          "regulation": "UK Data Protection Act 2018",
+          "clause": "Section 14 — Right to Human Review of Automated Decisions",
+          "url": "https://www.legislation.gov.uk/ukpga/2018/12/section/14",
+          "plain_english": "Individuals have the right to require human review of automated decisions involving special category data including health, political opinions, and biometric data",
+          "sector_priority": ["all"]
+        }
+      ],
+      "consequence_if_missing": "Without a documented boundary reviewed by legal, the system's data practices operate in a legal grey area. ICO enforcement for undocumented profiling can result in enforcement notices, fines up to £17.5 million or 4% of global annual turnover, and mandatory system suspension. These costs are not in the projected ROI.",
+      "consequence_if_partial": "A boundary definition exists but has not been reviewed by legal counsel. Self-defined personalisation boundaries that have not been tested against GDPR Article 22 and ICO profiling guidance provide limited protection in an enforcement context.",
+      "not_applicable_condition": "System uses no individual behavioural data — uses only aggregate, anonymised, operational, or publicly available data with no individual identifiers",
+      "not_applicable_note": "Not applicable — your system uses no individual behavioural data. Element 6 does not apply and has been auto-confirmed.",
+      "reliability_reduction_missing": 10,
+      "reliability_reduction_partial": 5,
+      "applicable_to": ["individual_data_only"],
+      "sectors": ["all"]
+    }
+  ]
+}
