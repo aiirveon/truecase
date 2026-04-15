@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrueCase — Data Flow Diagram</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0d1f0d;
+    color: #e0d8c1;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-width: 1400px;
+    overflow-x: auto;
+    padding: 40px 24px 48px;
+  }
+
+  .page-title {
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    margin-bottom: 4px;
+  }
+
+  .page-subtitle {
+    color: #998f7a;
+    font-size: 12.5px;
+    margin-bottom: 28px;
+    letter-spacing: 0.02em;
+  }
+
+  .canvas {
+    background: #0d1f0d;
+    border: 1.5px solid #c8a74c40;
+    border-radius: 16px;
+    padding: 36px;
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  /* Arrow between columns */
+  .arrow {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    padding: 0 6px;
+    padding-top: 72px; /* align with middle of box header area */
+    color: #c8a74c;
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 1;
+    user-select: none;
+  }
+
+  /* Each column box */
+  .col {
+    flex: 1;
+    min-width: 0;
+    background: #122712;
+    border: 2px solid #c8a74c;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .col-accent {
+    height: 3px;
+    background: #c8a74c;
+    flex-shrink: 0;
+  }
+
+  .col-inner {
+    padding: 14px 15px 16px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .layer-label {
+    color: #998f7a;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+
+  .col-header {
+    color: #c8a74c;
+    font-size: 13.5px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    margin-bottom: 9px;
+  }
+
+  .divider {
+    height: 1px;
+    background: #c8a74c55;
+    margin-bottom: 11px;
+    flex-shrink: 0;
+  }
+
+  .section {
+    margin-bottom: 12px;
+  }
+  .section:last-child {
+    margin-bottom: 0;
+  }
+
+  .key-label {
+    color: #c8a74c;
+    font-size: 11.5px;
+    font-weight: 600;
+    margin-bottom: 3px;
+    letter-spacing: 0.01em;
+  }
+
+  .sub-item {
+    color: #e0d8c1;
+    font-size: 10.5px;
+    line-height: 1.55;
+    padding-left: 10px;
+    margin-bottom: 1px;
+  }
+
+  .sub-item::before {
+    content: '·';
+    color: #c8a74c88;
+    margin-right: 5px;
+    margin-left: -9px;
+  }
+
+  .note {
+    color: #998f7a;
+    font-size: 10px;
+    font-style: italic;
+    margin-top: 4px;
+    padding-left: 2px;
+    line-height: 1.5;
+  }
+
+  .inner-divider {
+    height: 1px;
+    background: #c8a74c22;
+    margin: 9px 0;
+  }
+
+  .footer-note {
+    text-align: center;
+    color: #998f7a;
+    font-size: 11px;
+    margin-top: 22px;
+    letter-spacing: 0.02em;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+  <div class="page-title">TrueCase — Data Flow Diagram</div>
+  <div class="page-subtitle">AI Business Case Builder &nbsp;·&nbsp; Next.js + Claude Sonnet &nbsp;·&nbsp; Knowledge-Grounded Output</div>
+
+  <div class="canvas">
+
+    <!-- COLUMN 1 — Layer 1 / USER INPUT -->
+    <div class="col">
+      <div class="col-accent"></div>
+      <div class="col-inner">
+        <div class="layer-label">Layer 1</div>
+        <div class="col-header">User Input</div>
+        <div class="divider"></div>
+
+        <div class="section">
+          <div class="key-label">Q1 — Decision type</div>
+          <div class="sub-item">Decisions affecting individuals</div>
+          <div class="sub-item">Decisions affecting organisations</div>
+          <div class="sub-item">Internal analysis only</div>
+          <div class="sub-item">Process automation, no prior decision</div>
+        </div>
+
+        <div class="inner-divider"></div>
+
+        <div class="section">
+          <div class="key-label">Q2 — Data type</div>
+          <div class="sub-item">Personal data (identifiable individuals)</div>
+          <div class="sub-item">Aggregated / anonymised data</div>
+          <div class="sub-item">Operational or sensor data</div>
+          <div class="sub-item">Publicly available data only</div>
+        </div>
+
+        <div class="inner-divider"></div>
+
+        <div class="section">
+          <div class="key-label">Q3 — Scale</div>
+          <div class="sub-item">&lt;100 decisions / month</div>
+          <div class="sub-item">Hundreds–thousands / month</div>
+          <div class="sub-item">Tens of thousands+ / month</div>
+          <div class="sub-item">Unknown — still in development</div>
+        </div>
+
+        <div class="inner-divider"></div>
+
+        <div class="section">
+          <div class="key-label">Q4 — Sector</div>
+          <div class="sub-item">Financial services · Healthcare</div>
+          <div class="sub-item">Media · Retail · Real estate</div>
+          <div class="sub-item">Recruitment · Public sector</div>
+          <div class="sub-item">Tech platform · Other</div>
+        </div>
+
+        <div class="inner-divider"></div>
+
+        <div class="section">
+          <div class="key-label">Financial inputs</div>
+          <div class="sub-item">Current annual cost £</div>
+          <div class="sub-item">Expected efficiency gain %</div>
+          <div class="sub-item">Expected error / risk reduction %</div>
+          <div class="sub-item">Regulatory fine exposure £</div>
+          <div class="sub-item">AI system annual cost £</div>
+          <div class="sub-item">Optional context field (textarea)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow">→</div>
+
+    <!-- COLUMN 2 — Layer 2 + 3 / LOCAL PROCESSING -->
+    <div class="col">
+      <div class="col-accent"></div>
+      <div class="col-inner">
+        <div class="layer-label">Layers 2 + 3</div>
+        <div class="col-header">Local Processing</div>
+        <div class="divider"></div>
+
+        <div class="section">
+          <div class="key-label">Governance Gate</div>
+          <div class="sub-item">Output Limit Control</div>
+          <div class="sub-item">Human Review</div>
+          <div class="sub-item">Decision Audit Trail</div>
+          <div class="sub-item">Regulatory Map</div>
+          <div class="sub-item">AI Performance Docs</div>
+          <div class="sub-item">Data Use Boundary</div>
+          <div class="note">Each missing element deducts points<br>(−10 to −25 per gap)</div>
+        </div>
+
+        <div class="inner-divider"></div>
+
+        <div class="section">
+          <div class="key-label">Reliability Score</div>
+          <div class="sub-item">Starts at 100%</div>
+          <div class="sub-item">Element status: Confirmed / Partial / Missing</div>
+          <div class="sub-item">Score bands: 80–100% green, 50–79% amber, &lt;50% red</div>
+          <div class="sub-item">Reliability-adjusted projection = gain × score</div>
+        </div>
+
+        <div class="inner-divider"></div>
+
+        <div class="section">
+          <div class="key-label">calculations.ts</div>
+          <div class="sub-item">projectedGain = cost × efficiency + (fine × errorRed × 0.3)</div>
+          <div class="sub-item">adjustedGain = projectedGain × (score / 100)</div>
+          <div class="sub-item">netGain / ROI</div>
+          <div class="sub-item">breakEven (months)</div>
+          <div class="note">All local — zero API cost</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow">→</div>
+
+    <!-- COLUMN 3 — Layer 4 / KNOWLEDGE LOOKUP -->
+    <div class="col">
+      <div class="col-accent"></div>
+      <div class="col-inner">
+        <div class="layer-label">Layer 4</div>
+        <div class="col-header">Knowledge Lookup</div>
+        <div class="divider"></div>
+
+        <div class="section">
+          <div class="key-label">governance-kb.json</div>
+          <div class="sub-item">6 elements with regulatory anchors</div>
+          <div class="sub-item">Consequence text (missing / partial)</div>
+          <div class="sub-item">Reliability penalties per element</div>
+          <div class="sub-item">Applicable sectors + use case tags</div>
+        </div>
+
+        <div class="inner-divider"></div>
+
+        <div class="section">
+          <div class="key-label">sdg-kb.json</div>
+          <div class="sub-item">15 verified Q1 + Q4 → SDG mappings</div>
+          <div class="sub-item">Primary + Secondary SDG per use case</div>
+          <div class="sub-item">UN target text for each SDG</div>
+          <div class="sub-item">Governance dependencies</div>
+          <div class="sub-item">negative_condition flags</div>
+          <div class="sub-item">Micro / meso / macro impact level</div>
+        </div>
+
+        <div class="inner-divider"></div>
+
+        <div class="section">
+          <div class="key-label">benchmarks.json</div>
+          <div class="sub-item">Sector fine exposure ranges</div>
+          <div class="sub-item">Efficiency gain benchmarks</div>
+          <div class="sub-item">Error reduction benchmarks</div>
+          <div class="sub-item">AI system cost benchmarks</div>
+          <div class="note">All local — zero API cost</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow">→</div>
+
+    <!-- COLUMN 4 — Layer 5 / CLAUDE API -->
+    <div class="col">
+      <div class="col-accent"></div>
+      <div class="col-inner">
+        <div class="layer-label">Layer 5</div>
+        <div class="col-header">Claude API</div>
+        <div class="divider"></div>
+
+        <div class="section">
+          <div class="key-label">Model: claude-sonnet</div>
+          <div class="sub-item">max_tokens: 1,500</div>
+          <div class="sub-item">Server-side only (API route)</div>
+          <div class="sub-item">One call per Generate click — no auto-loading</div>
+        </div>
+
+        <div class="inner-divider"></div>
+
+        <div class="section">
+          <div class="key-label">Receives:</div>
+          <div class="sub-item">Financial outputs (all calculated values)</div>
+          <div class="sub-item">Governance statuses (all 6 elements)</div>
+          <div class="sub-item">Reliability score + full breakdown</div>
+          <div class="sub-item">Full knowledge base (relevant entries)</div>
+          <div class="sub-item">Resolved SDG mapping + UN target text</div>
+          <div class="sub-item">Benchmark refs for sector</div>
+          <div class="sub-item">Q1–Q4 answers + optional context field</div>
+        </div>
+
+        <div class="inner-divider"></div>
+
+        <div class="section">
+          <div class="key-label">Strict rules:</div>
+          <div class="sub-item">No added regulatory claims beyond kb</div>
+          <div class="sub-item">No recalculation of financial figures</div>
+          <div class="sub-item">No inference beyond provided sources</div>
+          <div class="sub-item">Omit if uncertain — do not substitute</div>
+        </div>
+
+        <div class="inner-divider"></div>
+
+        <div class="section">
+          <div class="key-label">Returns JSON:</div>
+          <div class="sub-item">section1 — Business Case Summary</div>
+          <div class="sub-item">section2 — Governance Assessment</div>
+          <div class="sub-item">section3 — Social Return Signal</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow">→</div>
+
+    <!-- COLUMN 5 — Layer 5 → / OUTPUT -->
+    <div class="col">
+      <div class="col-accent"></div>
+      <div class="col-inner">
+        <div class="layer-label">Layer 5 →</div>
+        <div class="col-header">Output</div>
+        <div class="divider"></div>
+
+        <div class="section">
+          <div class="key-label">Section 1</div>
+          <div class="sub-item">Business Case Summary</div>
+          <div class="sub-item">CFO-readable · 200–250 words</div>
+          <div class="sub-item">Both headline + reliability-adjusted figures</div>
+          <div class="sub-item">Plain English — no jargon</div>
+        </div>
+
+        <div class="inner-divider"></div>
+
+        <div class="section">
+          <div class="key-label">Section 2</div>
+          <div class="sub-item">Governance Assessment</div>
+          <div class="sub-item">Each element status stated explicitly</div>
+          <div class="sub-item">Specific consequence per missing / partial</div>
+          <div class="sub-item">Named regulations — no generic "compliance"</div>
+          <div class="sub-item">Reliability score + adjusted projection</div>
+        </div>
+
+        <div class="inner-divider"></div>
+
+        <div class="section">
+          <div class="key-label">Section 3</div>
+          <div class="sub-item">Social Return Signal</div>
+          <div class="sub-item">Primary + secondary SDG</div>
+          <div class="sub-item">UN target text · impact level</div>
+          <div class="sub-item">Full SROI caveat (never abbreviated)</div>
+        </div>
+
+        <div class="inner-divider"></div>
+
+        <div class="section">
+          <div class="key-label">Export:</div>
+          <div class="sub-item">PDF download (3-page · @react-pdf/renderer)</div>
+          <div class="sub-item">HTML export</div>
+          <div class="sub-item">Processed server-side — immediately discarded</div>
+          <div class="sub-item">No user data stored</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /canvas -->
+
+  <div class="footer-note">
+    Layers 1–4 run entirely locally with zero API cost &nbsp;·&nbsp;
+    Layer 5 calls Claude Sonnet once per business case generation &nbsp;·&nbsp;
+    No user data stored
+  </div>
+
+</body>
+</html>
