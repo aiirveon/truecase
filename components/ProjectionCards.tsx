@@ -109,12 +109,18 @@ export default function ProjectionCards({
     )
   }
 
-  const { projectedGain, costOfInaction, netGain, roiPercent, roiExceedsRange } = projection
+  const {
+    realisedSavings,
+    riskReduction,
+    netAnnualBenefit,
+    roiPercent,
+    roiExceedsRange,
+  } = projection
 
-  // ── Reliability-adjusted figures ──
-  const factor        = reliabilityScore / 100
-  const adjustedGain  = projectedGain * factor
-  const governanceGap = projectedGain - adjustedGain
+  // ── Reliability-adjusted figures (applied to NET BENEFIT, not risk) ──
+  const factor             = reliabilityScore / 100
+  const adjustedNetBenefit = netAnnualBenefit * factor
+  const governanceGap      = netAnnualBenefit - adjustedNetBenefit
 
   // ── Break-even display ──
   const breakEvenDisplay = formatBreakEven(projection)
@@ -143,48 +149,40 @@ export default function ProjectionCards({
         </div>
       </div>
 
-      {/* ── Output cards — 2 × 3 grid ────────────────────────── */}
+      {/* ── Realised value cards — 2 × 3 grid ────────────────── */}
+      {/* Realised savings, net benefit and ROI are the headline figures.       */}
+      {/* Avoided risk is shown separately below — never merged into these.      */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 
-        {/* Card 1 — Projected Annual Gain */}
+        {/* Card 1 — Realised Annual Savings */}
         <OutputCard
-          label="Projected Annual Gain"
-          value={fmt(projectedGain)}
+          label="Realised Annual Savings"
+          value={fmt(realisedSavings)}
           valueClass="font-mono text-3xl font-bold text-foreground"
-          footnote={`${fmt(governanceGap)} governance gap`}
-          footnote2={`Based on ${confirmedCount} of 6 governance elements confirmed`}
+          footnote="Money saved per year from efficiency gains"
         />
 
-        {/* Card 2 — Reliability-Adjusted Gain (same dimensions, coloured) */}
+        {/* Card 2 — Net Annual Benefit (after system cost) */}
         <OutputCard
-          label="Reliability-Adjusted Gain"
-          value={fmt(adjustedGain)}
-          valueClass={`font-mono text-3xl font-bold ${scText}`}
+          label="Net Annual Benefit After System Cost"
+          value={fmt(netAnnualBenefit)}
+          valueClass={`font-mono text-3xl font-bold ${netAnnualBenefit < 0 ? 'text-destructive' : 'text-foreground'}`}
+          footnote="Realised savings minus AI system cost"
+        />
+
+        {/* Card 3 — Reliability-Adjusted Net Benefit (coloured) */}
+        <OutputCard
+          label="Reliability-Adjusted Net Benefit"
+          value={fmt(adjustedNetBenefit)}
+          valueClass={`font-mono text-2xl font-bold ${scText}`}
           sublabel={`At ${reliabilityScore}% reliability`}
+          footnote={`${fmt(governanceGap)} governance gap`}
+          footnote2={`Based on ${confirmedCount} of 6 governance elements confirmed`}
           coloredBg={scBg}
           coloredBorder={scBorder}
         />
 
-        {/* Card 3 — Cost of Inaction */}
-        <OutputCard
-          label="Annual Cost of Inaction"
-          value={fmt(costOfInaction)}
-          valueClass="font-mono text-2xl text-foreground"
-          sublabel={
-            financialInputs.fineExposure > 0
-              ? `Includes ${fmt(financialInputs.fineExposure)} regulatory exposure`
-              : 'Revenue lost without AI'
-          }
-        />
-
-        {/* Card 4 — Net Annual Gain */}
-        <OutputCard
-          label="Net Annual Gain After System Cost"
-          value={fmt(netGain)}
-          valueClass={`font-mono text-2xl ${netGain < 0 ? 'text-destructive' : 'text-foreground'}`}
-        />
-
-        {/* Card 5 — ROI % */}
+        {/* Card 4 — ROI % (realised savings only) */}
         <OutputCard
           label="Return on Investment"
           value={
@@ -199,12 +197,12 @@ export default function ProjectionCards({
           }
           footnote={
             roiExceedsRange
-              ? 'Check your inputs — the AI system cost is very low relative to the value generated.'
-              : undefined
+              ? 'Check your inputs — the AI system cost is very low relative to the realised savings.'
+              : 'Based on realised savings only — excludes avoided risk'
           }
         />
 
-        {/* Card 6 — Break-Even Point */}
+        {/* Card 5 — Break-Even Point (realised savings only) */}
         <OutputCard
           label="Break-Even Point"
           value={roiExceedsRange ? 'Exceeds typical range' : breakEvenDisplay}
@@ -213,6 +211,20 @@ export default function ProjectionCards({
               ? 'font-medium text-base text-foreground-muted'
               : 'font-mono text-2xl text-foreground'
           }
+          footnote={roiExceedsRange ? undefined : 'From realised savings'}
+        />
+
+        {/* Card 6 — Risk Reduction (avoided exposure) — SEPARATE figure */}
+        <OutputCard
+          label="Risk Reduction (Avoided Exposure)"
+          value={fmt(riskReduction)}
+          valueClass="font-mono text-2xl text-foreground-muted"
+          sublabel={
+            financialInputs.fineExposure > 0
+              ? `Risk-adjusted from ${fmt(financialInputs.fineExposure)} regulatory exposure`
+              : 'Risk-adjusted avoided downside'
+          }
+          footnote="Risk-adjusted estimate — not realised income, and not counted in ROI or net benefit"
         />
 
       </div>

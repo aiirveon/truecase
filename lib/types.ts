@@ -36,18 +36,32 @@ export interface FinancialInputs {
 }
 
 // ─── Projection output ────────────────────────────────────────────────────────
+//
+// Realised savings and avoided risk are kept as SEPARATE figures and are never
+// blended. realisedSavings is money actually saved per year; riskReduction is a
+// risk-adjusted hypothetical (avoided downside) shown alongside but never added
+// into the headline benefit or into ROI. See docs/CALCULATION_METHODOLOGY.md.
 
 export interface Projection {
-  projectedGain: number
-  costOfInaction: number
-  netGain: number
+  // Realised efficiency savings: currentAnnualCost × (efficiencyGain / 100).
+  // Money actually saved per year. This is the only term used for ROI.
+  realisedSavings: number
+  // Avoided regulatory exposure: fineExposure × (errorReduction / 100) × 0.3.
+  // Risk-adjusted, directional. NEVER added into ROI or net benefit.
+  riskReduction: number
+  // realisedSavings − systemCost. Risk reduction is deliberately NOT in this.
+  netAnnualBenefit: number
+  // (netAnnualBenefit / systemCost) × 100 — computed from realised savings only.
   roiPercent: number
   systemCost: number
+  // Months to recover systemCost from realised savings alone (raw value;
+  // format with formatBreakEven, which applies the "< 1 month" / "—" floors).
   breakEvenValue: number
   breakEvenUnit: string
   // True when roiPercent exceeds the sane ceiling — signals the UI/PDF to
-  // present an honest advisory rather than a literal multi-thousand-percent
-  // figure. Driven by a near-zero systemCost relative to projectedGain.
+  // present an honest advisory rather than a literal runaway figure. With the
+  // fine term removed from ROI this should essentially never fire on sane
+  // inputs; it remains as a secondary safety net for mis-entered system costs.
   roiExceedsRange: boolean
 }
 
@@ -101,15 +115,22 @@ export interface GenerateRequest {
 // ─── Generate-narrative route request (v2) ────────────────────────────────────
 
 export interface FinancialOutputs {
-  projectedGain:    number
-  adjustedGain:     number
-  netGain:          number
-  roiPercent:       number
+  // Realised efficiency savings — money actually saved per year.
+  realisedSavings:    number
+  // Avoided regulatory exposure — risk-adjusted hypothetical, NOT realised
+  // income and NOT counted in ROI. Kept separate from realisedSavings.
+  riskReduction:      number
+  // realisedSavings − systemCost.
+  netAnnualBenefit:   number
+  // Reliability-adjusted net benefit (netAnnualBenefit × reliabilityScore/100).
+  adjustedNetBenefit: number
+  // (netAnnualBenefit / systemCost) × 100 — realised savings only.
+  roiPercent:         number
   // True when roiPercent exceeds the sane ceiling. When set, the narrative
   // prompt must not cite a literal ROI/break-even figure.
-  roiExceedsRange:  boolean
-  breakEven:        string
-  reliabilityScore: number
+  roiExceedsRange:    boolean
+  breakEven:          string
+  reliabilityScore:   number
 }
 
 export interface ReliabilityBreakdownItem {

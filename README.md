@@ -96,7 +96,7 @@ Output: three sections (Business Case Summary, Governance Assessment, Social Ret
 
 ## Methodology and limitations (honest)
 
-**Financial formula.** TrueCase uses a fixed formula: `projectedGain = currentCost × (efficiencyGain / 100) + fineExposure × (errorReduction / 100) × 0.3`. The 0.3 coefficient on fine exposure is a conservative estimate of enforcement probability — it is not actuarial. The formula is not a substitute for detailed financial modelling.
+**Financial formula.** TrueCase keeps realised savings and avoided risk as *separate* figures and never blends them: `realisedSavings = currentCost × (efficiencyGain / 100)` (money actually saved) and, shown separately, `riskReduction = fineExposure × (errorReduction / 100) × 0.3` (risk-adjusted avoided exposure). ROI and break-even are computed from realised savings only (`netAnnualBenefit = realisedSavings − systemCost`); avoided risk is reported alongside but never counted in ROI. The 0.3 coefficient on fine exposure is a conservative, non-actuarial estimate of enforcement probability. The formula is not a substitute for detailed financial modelling. See [docs/CALCULATION_METHODOLOGY.md](docs/CALCULATION_METHODOLOGY.md).
 
 **Reliability score.** The score is a weighted deduction from 100% based on user-reported governance element statuses. It is not calibrated against real AI deployment outcomes. A score of 80% does not mean an 80% probability of achieving the projected gain — it means the projection is made against a governance baseline with fewer gaps.
 

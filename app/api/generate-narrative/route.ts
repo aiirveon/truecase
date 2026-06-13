@@ -14,6 +14,7 @@ STRICT RULES:
 3. Do not add market context, industry benchmarks, or sector observations that are not in the knowledge_base or benchmarks objects provided.
 4. If you are uncertain about a claim, omit it. Do not substitute inference for fact.
 5. Section 2 must reference the reliability score breakdown exactly as provided. Do not summarise the governance assessment — state each element status as given.
+6. Keep realised savings and avoided risk SEPARATE. Realised savings (and the net annual benefit derived from it) is money actually saved. Risk reduction is avoided regulatory exposure — a risk-adjusted hypothetical, not realised income, and not part of ROI or net benefit. Never add the two together into a single headline figure, and never imply the avoided fine is money earned.
 
 Return valid JSON only. No markdown. No preamble.
 Format: { section1, section2, section3 }
@@ -21,7 +22,7 @@ Format: { section1, section2, section3 }
 SECTION SPECS:
 
 Section 1 — Business Case Summary (200-250 words):
-Plain English. CFO-readable. Must reference both the headline projection AND the reliability-adjusted projection. Must state what the reliability score means in plain terms. Never use: "leveraging", "synergies", "driving value", "unlock potential".
+Plain English. CFO-readable. Must reference the net annual benefit AND the reliability-adjusted net benefit (both derived from realised savings). Mention the risk reduction (avoided regulatory exposure) separately and explicitly as a risk-adjusted figure that is NOT counted in the ROI or net benefit. Must state what the reliability score means in plain terms. Never use: "leveraging", "synergies", "driving value", "unlock potential".
 
 Section 2 — Governance Assessment (150-200 words):
 State each element status — confirmed, partial, or missing. For each missing or partial element: one sentence stating the specific consequence from the knowledge base. End with the reliability score and the reliability-adjusted projection figure. Name regulations specifically — do not use generic "regulations" or "compliance".
@@ -71,14 +72,19 @@ function buildUserMessage(body: GenerateNarrativeRequest): string {
   lines.push(`Scale: ${guidedAnswers.q3}`)
   lines.push('')
 
-  // Pre-calculated financial outputs — Claude must not recalculate
-  lines.push('Financial outputs (do not recalculate):')
-  lines.push(`Projected annual gain: ${fmtGBP(financialOutputs.projectedGain)}`)
-  lines.push(`Reliability-adjusted gain: ${fmtGBP(financialOutputs.adjustedGain)}`)
-  lines.push(`Net annual gain: ${fmtGBP(financialOutputs.netGain)}`)
+  // Pre-calculated financial outputs — Claude must not recalculate. Realised
+  // savings and avoided risk are DISTINCT figures and must never be blended.
+  lines.push('Financial outputs (do not recalculate; these are DISTINCT figures — never add them together):')
+  lines.push(`Realised annual savings (money actually saved per year from efficiency): ${fmtGBP(financialOutputs.realisedSavings)}`)
+  lines.push(`Net annual benefit (realised savings minus AI system cost): ${fmtGBP(financialOutputs.netAnnualBenefit)}`)
+  lines.push(`Reliability-adjusted net benefit: ${fmtGBP(financialOutputs.adjustedNetBenefit)}`)
+  lines.push(
+    `Risk reduction — avoided regulatory exposure (RISK-ADJUSTED HYPOTHETICAL, ` +
+    `NOT realised income, and NOT included in net benefit or ROI): ${fmtGBP(financialOutputs.riskReduction)}`,
+  )
   if (financialOutputs.roiExceedsRange) {
-    // The computed ROI exceeds the credible range (a near-zero system cost
-    // relative to the value generated). Suppress the literal figures so the
+    // The computed ROI exceeds the credible range (a too-low system cost
+    // relative to realised savings). Suppress the literal figures so the
     // narrative never prints something like "an exceptional 1,350,980% ROI".
     lines.push(
       'ROI: EXCEEDS CREDIBLE RANGE — do NOT state any specific ROI percentage ' +
@@ -87,10 +93,18 @@ function buildUserMessage(body: GenerateNarrativeRequest): string {
       'advise the reader to verify the AI system cost input before relying on the figures.',
     )
   } else {
-    lines.push(`ROI: ${Math.round(financialOutputs.roiPercent)}%`)
-    lines.push(`Break-even: ${financialOutputs.breakEven}`)
+    lines.push(`ROI (from realised savings only): ${Math.round(financialOutputs.roiPercent)}%`)
+    lines.push(`Break-even (from realised savings only): ${financialOutputs.breakEven}`)
   }
   lines.push(`Reliability score: ${reliabilityScore}%`)
+  lines.push('')
+  lines.push(
+    'IMPORTANT: Describe realised savings and risk reduction as separate things. ' +
+    'Realised savings is money saved. Risk reduction is avoided regulatory exposure — ' +
+    'a risk-adjusted estimate, not money earned, and explicitly not part of the ROI or ' +
+    'net benefit. Do not merge them into one headline number or imply the avoided fine ' +
+    'is realised income.',
+  )
   lines.push('')
 
   // Score breakdown — Claude must state each element exactly as given

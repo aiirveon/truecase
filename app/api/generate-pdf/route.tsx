@@ -44,15 +44,21 @@ const C = {
 // ─── Request body ─────────────────────────────────────────────────────────────
 
 interface FinancialOutputs {
-  projectedGain:   number
-  adjustedGain:    number
-  costOfInaction:  number
-  netGain:         number
-  roiPercent:      number
+  // Realised efficiency savings — money actually saved per year.
+  realisedSavings:    number
+  // Avoided regulatory exposure — risk-adjusted hypothetical, shown as a
+  // distinct line and explicitly NOT included in ROI or net benefit.
+  riskReduction:      number
+  // realisedSavings − systemCost.
+  netAnnualBenefit:   number
+  // Reliability-adjusted net benefit.
+  adjustedNetBenefit: number
+  // (netAnnualBenefit / systemCost) × 100 — realised savings only.
+  roiPercent:         number
   // True when roiPercent exceeds the sane ceiling — render an honest advisory
-  // for break-even instead of a runaway "1 month" figure.
-  roiExceedsRange: boolean
-  breakEven:       string
+  // for ROI / break-even instead of a runaway figure.
+  roiExceedsRange:    boolean
+  breakEven:          string
 }
 
 interface PDFRequest {
@@ -225,6 +231,35 @@ const s = StyleSheet.create({
     fontSize: 9,
     color: C.textMuted,
     marginBottom: 8,
+  },
+  // Risk reduction — distinct, clearly-labelled box. Kept visually separate from
+  // the realised-value boxes so avoided risk is never read as realised money.
+  riskBox: {
+    borderWidth: 1,
+    borderColor: C.border,
+    backgroundColor: C.boxBg,
+    padding: 12,
+    borderRadius: 3,
+    marginBottom: 10,
+  },
+  riskLabel: {
+    fontSize: 7,
+    fontFamily: 'Helvetica-Bold',
+    color: C.textMuted,
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+    marginBottom: 6,
+  },
+  riskValue: {
+    fontSize: 16,
+    fontFamily: 'Courier-Bold',
+    color: C.textMuted,
+  },
+  riskNote: {
+    fontSize: 8,
+    color: C.textMuted,
+    marginTop: 4,
+    lineHeight: 1.4,
   },
   // Governance table
   table: {
@@ -406,7 +441,21 @@ function TrueCasePDF({
 }: Omit<PDFRequest, 'useCase' | 'kbVersion' | 'kbVerifiedDate'>) {
   const sc   = getScoreColor(reliabilityScore)
   const scBg = getScoreBg(reliabilityScore)
-  const { projectedGain, adjustedGain, breakEven, roiExceedsRange } = financialOutputs
+  const {
+    realisedSavings,
+    riskReduction,
+    netAnnualBenefit,
+    adjustedNetBenefit,
+    roiPercent,
+    breakEven,
+    roiExceedsRange,
+  } = financialOutputs
+
+  // ROI + break-even line — honest advisory when the figure runs away.
+  const roiLine = roiExceedsRange
+    ? 'Return on investment exceeds the credible range — verify the AI system cost input.'
+    : `Return on investment (realised savings only): ${roiPercent >= 0 ? '+' : ''}`
+      + `${Math.round(roiPercent).toLocaleString('en-GB')}%  ·  ${breakEven} to break even`
 
   return (
     <Document>
@@ -424,20 +473,23 @@ function TrueCasePDF({
         <Text style={s.sectionHeading}>Business Case Summary</Text>
         <Text style={s.body}>{section1}</Text>
 
-        {/* Two financial boxes — equal size */}
+        {/* Two financial boxes — equal size. Both derive from REALISED savings. */}
         <View style={s.financialRow}>
           <View style={s.financialBox}>
-            <Text style={s.financialLabel}>Projected Annual Gain</Text>
+            <Text style={s.financialLabel}>Net Annual Benefit</Text>
             <Text style={[s.financialValue, { color: C.text }]}>
-              {fmt(projectedGain)}
+              {fmt(netAnnualBenefit)}
+            </Text>
+            <Text style={s.financialNote}>
+              Realised savings ({fmt(realisedSavings)}) minus AI system cost
             </Text>
           </View>
           <View style={[s.financialBox, { borderColor: sc, backgroundColor: scBg }]}>
             <Text style={[s.financialLabel, { color: sc }]}>
-              Reliability-Adjusted Gain
+              Reliability-Adjusted Net Benefit
             </Text>
             <Text style={[s.financialValue, { color: sc }]}>
-              {fmt(adjustedGain)}
+              {fmt(adjustedNetBenefit)}
             </Text>
             <Text style={[s.financialNote, { color: sc }]}>
               At {reliabilityScore}% reliability
@@ -445,11 +497,17 @@ function TrueCasePDF({
           </View>
         </View>
 
-        <Text style={s.breakEven}>
-          {roiExceedsRange
-            ? 'Break-even and ROI exceed the credible range — verify the AI system cost input.'
-            : `${breakEven} to break even`}
-        </Text>
+        <Text style={s.breakEven}>{roiLine}</Text>
+
+        {/* Risk reduction — distinct line, explicitly excluded from ROI/benefit */}
+        <View style={s.riskBox}>
+          <Text style={s.riskLabel}>Risk Reduction — Avoided Regulatory Exposure</Text>
+          <Text style={s.riskValue}>{fmt(riskReduction)}</Text>
+          <Text style={s.riskNote}>
+            Risk-adjusted estimate of avoided downside. Not realised income, and
+            not included in the return on investment or net benefit figures above.
+          </Text>
+        </View>
       </Page>
 
       {/* ══ PAGE 2 — Governance Assessment ══════════════════════ */}

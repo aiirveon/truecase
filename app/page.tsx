@@ -56,21 +56,20 @@ export default function Home() {
   // ── Derived state ─────────────────────────────────────────────────────────
   const projection  = financialInputs ? calculate(financialInputs) : null
 
-  // Implausible-input guard. Two independent triggers, because a low input ratio
-  // is not the only path to runaway ROI:
+  // Implausible-input guard. Two independent triggers:
   //
   //  (a) systemCostTooLow — a near-zero AI system cost relative to the *current
-  //      annual cost* (e.g. a £788 system against a £37M process → 4,772,507%).
-  //      Threshold: aiSystemCost must be at least 1% of currentAnnualCost.
+  //      annual cost* (e.g. a £788 system against a £37M process). Threshold:
+  //      aiSystemCost must be at least 1% of currentAnnualCost. This is the
+  //      primary check.
   //
-  //  (b) roiImplausible — the *computed* ROI exceeds the sanity ceiling. This is
-  //      the authoritative backstop: it catches cases (a) misses entirely, such
-  //      as a large projectedGain driven by fineExposure (not currentAnnualCost)
-  //      against a small system cost — e.g. £90,968,230 gain at 1,350,980% ROI,
-  //      where aiSystemCost was still >1% of a modest currentAnnualCost so (a)
-  //      never fired. Gating on the output is what makes the guard sound.
+  //  (b) roiImplausible — the *computed* ROI exceeds the sanity ceiling. ROI is
+  //      now derived from realised savings vs system cost only (the fine term was
+  //      removed from ROI — see lib/calculations.ts), so the old fine-driven
+  //      runaway can no longer occur. This remains as a secondary net for a
+  //      mis-entered (too-low) system cost that slips past (a).
   //
-  // Either trigger disables the Generate button, so no pathological PDF or
+  // Either trigger disables the Generate button, so no implausible PDF or
   // narrative can be produced in the first place.
   const MIN_SYSTEM_COST_RATIO = 0.01
   const systemCostTooLow =
@@ -95,7 +94,7 @@ export default function Home() {
   async function handleGenerate() {
     if (!projection || !guidedAnswers) return
 
-    const adjustedGain = projection.projectedGain * (reliabilityScore / 100)
+    const adjustedNetBenefit = projection.netAnnualBenefit * (reliabilityScore / 100)
 
     // Build score breakdown from current element statuses + KB reductions
     const reliabilityScoreBreakdown: ReliabilityBreakdownItem[] =
@@ -136,12 +135,13 @@ export default function Home() {
         body: JSON.stringify({
           financialInputs,
           financialOutputs: {
-            projectedGain:    projection.projectedGain,
-            adjustedGain,
-            netGain:          projection.netGain,
-            roiPercent:       projection.roiPercent,
-            roiExceedsRange:  projection.roiExceedsRange,
-            breakEven:        formatBreakEven(projection),
+            realisedSavings:    projection.realisedSavings,
+            riskReduction:      projection.riskReduction,
+            netAnnualBenefit:   projection.netAnnualBenefit,
+            adjustedNetBenefit,
+            roiPercent:         projection.roiPercent,
+            roiExceedsRange:    projection.roiExceedsRange,
+            breakEven:          formatBreakEven(projection),
             reliabilityScore,
           },
           governanceElements,
@@ -172,7 +172,7 @@ export default function Home() {
   async function handleDownloadPDF() {
     if (!narrative || !projection) return
 
-    const adjustedGain   = projection.projectedGain * (reliabilityScore / 100)
+    const adjustedNetBenefit = projection.netAnnualBenefit * (reliabilityScore / 100)
     const generationDate = new Date().toLocaleDateString('en-GB', {
       day: '2-digit', month: 'long', year: 'numeric',
     })
@@ -199,13 +199,13 @@ export default function Home() {
           section2:                  narrative.section2,
           section3:                  narrative.section3,
           financialOutputs: {
-            projectedGain:   projection.projectedGain,
-            adjustedGain,
-            costOfInaction:  projection.costOfInaction,
-            netGain:         projection.netGain,
-            roiPercent:      projection.roiPercent,
-            roiExceedsRange: projection.roiExceedsRange,
-            breakEven:       formatBreakEven(projection),
+            realisedSavings:    projection.realisedSavings,
+            riskReduction:      projection.riskReduction,
+            netAnnualBenefit:   projection.netAnnualBenefit,
+            adjustedNetBenefit,
+            roiPercent:         projection.roiPercent,
+            roiExceedsRange:    projection.roiExceedsRange,
+            breakEven:          formatBreakEven(projection),
           },
           governanceElements,
           reliabilityScore,
@@ -241,7 +241,7 @@ export default function Home() {
   function handleExportHTML() {
     if (!narrative || !projection) return
 
-    const adjustedGain   = projection.projectedGain * (reliabilityScore / 100)
+    const adjustedNetBenefit = projection.netAnnualBenefit * (reliabilityScore / 100)
     const generationDate = new Date().toLocaleDateString('en-GB', {
       day: '2-digit', month: 'long', year: 'numeric',
     })
@@ -249,7 +249,7 @@ export default function Home() {
     const html = buildHTMLReport({
       narrative,
       projection,
-      adjustedGain,
+      adjustedNetBenefit,
       reliabilityScore,
       confirmedCount,
       governanceElements,
@@ -325,10 +325,10 @@ export default function Home() {
                     + `of the current annual cost (${fmt(financialInputs.currentAnnualCost)}). That `
                     + `produces an unrealistic ROI and an untrustworthy business case. Enter a realistic `
                     + `system cost — typically 5–30% of the current process cost — to continue.`
-                  : `The projected return on investment exceeds the credible range. This usually means the `
-                    + `AI system cost (${fmt(financialInputs.aiSystemCost)}) is very low relative to the `
-                    + `value generated — often driven by a large fine-exposure figure. Re-check the system `
-                    + `cost and fine-exposure inputs so the business case stays trustworthy.`}
+                  : `The return on investment exceeds the credible range. ROI is calculated from realised `
+                    + `efficiency savings against the AI system cost (${fmt(financialInputs.aiSystemCost)}), `
+                    + `so this usually means the system cost is too low relative to the realised savings. `
+                    + `Re-check the system cost and efficiency-gain inputs so the business case stays trustworthy.`}
               </p>
             </div>
           )}
@@ -368,7 +368,7 @@ export default function Home() {
 interface HTMLReportOptions {
   narrative:           NarrativeResult
   projection:          NonNullable<ReturnType<typeof calculate>>
-  adjustedGain:        number
+  adjustedNetBenefit:  number
   reliabilityScore:    number
   confirmedCount:      number
   governanceElements:  ElementSummary[]
@@ -419,7 +419,7 @@ function statusBgColor(status: string): string {
 function buildHTMLReport({
   narrative,
   projection,
-  adjustedGain,
+  adjustedNetBenefit,
   reliabilityScore,
   confirmedCount,
   governanceElements,
@@ -572,18 +572,26 @@ function buildHTMLReport({
       <p class="section-body">${narrative.section1}</p>
       <div class="card-row">
         <div class="card">
-          <p class="card-label">Projected Annual Gain</p>
-          <p class="card-value" style="color:#111827">${fmtGBP(projection.projectedGain)}</p>
+          <p class="card-label">Net Annual Benefit</p>
+          <p class="card-value" style="color:#111827">${fmtGBP(projection.netAnnualBenefit)}</p>
+          <p class="card-note">Realised savings (${fmtGBP(projection.realisedSavings)}) minus AI system cost</p>
         </div>
         <div class="card" style="border-color:${sc};background:${scBgHex}">
-          <p class="card-label" style="color:${sc}">Reliability-Adjusted Gain</p>
-          <p class="card-value" style="color:${sc}">${fmtGBP(adjustedGain)}</p>
+          <p class="card-label" style="color:${sc}">Reliability-Adjusted Net Benefit</p>
+          <p class="card-value" style="color:${sc}">${fmtGBP(adjustedNetBenefit)}</p>
           <p class="card-note" style="color:${sc}">At ${reliabilityScore}% reliability</p>
         </div>
       </div>
       <p class="break-even">${projection.roiExceedsRange
-        ? 'Break-even and ROI exceed the credible range — verify the AI system cost input.'
-        : (projection.breakEvenValue > 0 ? Math.ceil(projection.breakEvenValue) + ' ' + projection.breakEvenUnit : '—') + ' to break even'}</p>
+        ? 'Return on investment exceeds the credible range — verify the AI system cost input.'
+        : 'Return on investment (realised savings only): ' + (projection.roiPercent >= 0 ? '+' : '')
+          + Math.round(projection.roiPercent).toLocaleString('en-GB') + '% &nbsp;·&nbsp; '
+          + formatBreakEven(projection) + ' to break even'}</p>
+      <div class="card" style="margin-top:8px">
+        <p class="card-label">Risk Reduction — Avoided Regulatory Exposure</p>
+        <p class="card-value" style="color:#6B7280;font-size:22px">${fmtGBP(projection.riskReduction)}</p>
+        <p class="card-note">Risk-adjusted estimate of avoided downside. Not realised income, and not included in the ROI or net benefit figures above.</p>
+      </div>
     </div>
 
     <div class="section">

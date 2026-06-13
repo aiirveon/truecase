@@ -351,21 +351,27 @@ Field 6: AI system annual cost £
   Benchmark hint: reads from benchmarks.json
 
 Calculations (universal formula):
-projectedGain = currentCost × (efficiencyGain/100)
-  + (fineExposure × (errorReduction/100) × 0.3)
-systemCost = aiCost
-costOfInaction = projectedGain
-netGain = projectedGain - systemCost
-roiPercent = (netGain / systemCost) × 100
-breakEven = systemCost / (projectedGain/12) months
+Realised savings and avoided risk are kept SEPARATE — never blended, and only
+realised savings feed ROI/break-even. See docs/CALCULATION_METHODOLOGY.md.
 
-Output cards (unchanged from v1):
-- Projected annual gain £
-- Reliability-adjusted gain £ (equal card size)
-- Cost of inaction £
-- Net annual gain £
-- ROI %
-- Break-even point
+realisedSavings  = currentCost × (efficiencyGain/100)          ← money saved
+riskReduction    = fineExposure × (errorReduction/100) × 0.3   ← avoided risk (separate)
+systemCost       = aiCost
+netAnnualBenefit = realisedSavings − systemCost                ← risk NOT added
+roiPercent       = (netAnnualBenefit / systemCost) × 100       ← realised only
+breakEven        = systemCost / (realisedSavings/12) months    ← realised only
+
+ROI sanity ceiling: ROI_SANITY_CEILING (lib/calculations.ts), currently 2,000%.
+Secondary safety net; with the fine term gone from ROI the runaway case cannot
+occur from fine exposure.
+
+Output cards:
+- Realised annual savings £
+- Net annual benefit £ (realised savings − system cost)
+- Reliability-adjusted net benefit £ (equal card size)
+- ROI % (realised savings only)
+- Break-even point (realised savings only)
+- Risk reduction (avoided exposure) £ — shown separately, not in ROI/benefit
 
 CRITICAL: Both projection cards always same size.
 Governance gap callout always visible between them.
