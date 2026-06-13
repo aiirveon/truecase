@@ -5,7 +5,7 @@ import GuidedInput from '@/components/GuidedInput'
 import GovernanceGate from '@/components/GovernanceGate'
 import ProjectionCards from '@/components/ProjectionCards'
 import NarrativeDisplay from '@/components/NarrativeDisplay'
-import { calculate, formatBreakEven } from '@/lib/calculations'
+import { calculate, formatBreakEven, fmt, stripSroiCaveat } from '@/lib/calculations'
 import kb from '@/lib/governance-kb.json'
 import benchmarks from '@/lib/benchmarks.json'
 import type {
@@ -55,7 +55,19 @@ export default function Home() {
 
   // ── Derived state ─────────────────────────────────────────────────────────
   const projection  = financialInputs ? calculate(financialInputs) : null
-  const canGenerate = hasCalculated && projection !== null && !isGenerating
+
+  // Implausible-input guard: a near-zero AI system cost relative to the current
+  // annual cost is what produces runaway ROI (e.g. a £788 system against a £37M
+  // process → 4,772,507%). Block generation rather than emit a non-credible
+  // business case. Threshold: aiSystemCost must be at least 1% of currentAnnualCost.
+  const MIN_SYSTEM_COST_RATIO = 0.01
+  const inputsImplausible =
+    financialInputs !== null &&
+    financialInputs.currentAnnualCost > 0 &&
+    financialInputs.aiSystemCost < MIN_SYSTEM_COST_RATIO * financialInputs.currentAnnualCost
+
+  const canGenerate =
+    hasCalculated && projection !== null && !isGenerating && !inputsImplausible
 
   // ── Derive a safe filename slug from the context note ────────────────────
   function descriptionSlug(): string {
@@ -284,6 +296,21 @@ export default function Home() {
             from the knowledge base. Claude does not add claims beyond these sources.
             TrueCase stores nothing.
           </p>
+
+          {/* Implausible-input warning — shown when system cost is far too low */}
+          {hasCalculated && inputsImplausible && financialInputs && (
+            <div className="rounded border border-score-low bg-score-low-bg px-4 py-3">
+              <p className="text-xs font-medium text-score-low">
+                Check your inputs before generating
+              </p>
+              <p className="mt-1 text-xs text-foreground-muted leading-relaxed">
+                The AI system annual cost ({fmt(financialInputs.aiSystemCost)}) is less than 1%
+                of the current annual cost ({fmt(financialInputs.currentAnnualCost)}). That
+                produces an unrealistic ROI and an untrustworthy business case. Enter a realistic
+                system cost — typically 5–30% of the current process cost — to continue.
+              </p>
+            </div>
+          )}
 
           <button
             type="button"
@@ -556,7 +583,7 @@ function buildHTMLReport({
 
     <div class="section">
       <p class="section-label">Social Return &amp; SDG Alignment</p>
-      <p class="section-body">${narrative.section3}</p>
+      <p class="section-body">${stripSroiCaveat(narrative.section3)}</p>
       <div class="sroi-box">
         <p class="sroi-text">
           TrueCase SDG mapping is directional signal only. It is not an

@@ -45,6 +45,10 @@ export interface Projection {
   systemCost: number
   breakEvenValue: number
   breakEvenUnit: string
+  // True when roiPercent exceeds the sane ceiling — signals the UI/PDF to
+  // present an honest advisory rather than a literal multi-thousand-percent
+  // figure. Driven by a near-zero systemCost relative to projectedGain.
+  roiExceedsRange: boolean
 }
 
 export type ElementStatus = 'confirmed' | 'partial' | 'missing' | 'not_applicable'

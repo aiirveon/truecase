@@ -109,7 +109,7 @@ export default function ProjectionCards({
     )
   }
 
-  const { projectedGain, costOfInaction, netGain, roiPercent } = projection
+  const { projectedGain, costOfInaction, netGain, roiPercent, roiExceedsRange } = projection
 
   // ── Reliability-adjusted figures ──
   const factor        = reliabilityScore / 100
@@ -187,15 +187,32 @@ export default function ProjectionCards({
         {/* Card 5 — ROI % */}
         <OutputCard
           label="Return on Investment"
-          value={`${roiPercent >= 0 ? '+' : ''}${Math.round(roiPercent).toLocaleString('en-GB')}%`}
-          valueClass="font-mono text-2xl text-brand"
+          value={
+            roiExceedsRange
+              ? 'Exceeds typical range'
+              : `${roiPercent >= 0 ? '+' : ''}${Math.round(roiPercent).toLocaleString('en-GB')}%`
+          }
+          valueClass={
+            roiExceedsRange
+              ? 'font-medium text-base text-foreground-muted'
+              : 'font-mono text-2xl text-brand'
+          }
+          footnote={
+            roiExceedsRange
+              ? 'Check your inputs — the AI system cost is very low relative to the value generated.'
+              : undefined
+          }
         />
 
         {/* Card 6 — Break-Even Point */}
         <OutputCard
           label="Break-Even Point"
-          value={breakEvenDisplay}
-          valueClass="font-mono text-2xl text-foreground"
+          value={roiExceedsRange ? 'Exceeds typical range' : breakEvenDisplay}
+          valueClass={
+            roiExceedsRange
+              ? 'font-medium text-base text-foreground-muted'
+              : 'font-mono text-2xl text-foreground'
+          }
         />
 
       </div>
