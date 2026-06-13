@@ -76,8 +76,20 @@ function buildUserMessage(body: GenerateNarrativeRequest): string {
   lines.push(`Projected annual gain: ${fmtGBP(financialOutputs.projectedGain)}`)
   lines.push(`Reliability-adjusted gain: ${fmtGBP(financialOutputs.adjustedGain)}`)
   lines.push(`Net annual gain: ${fmtGBP(financialOutputs.netGain)}`)
-  lines.push(`ROI: ${Math.round(financialOutputs.roiPercent)}%`)
-  lines.push(`Break-even: ${financialOutputs.breakEven}`)
+  if (financialOutputs.roiExceedsRange) {
+    // The computed ROI exceeds the credible range (a near-zero system cost
+    // relative to the value generated). Suppress the literal figures so the
+    // narrative never prints something like "an exceptional 1,350,980% ROI".
+    lines.push(
+      'ROI: EXCEEDS CREDIBLE RANGE — do NOT state any specific ROI percentage ' +
+      'or break-even period anywhere in your output. Describe the return only ' +
+      'qualitatively (e.g. "the projected return exceeds a credible range"), and ' +
+      'advise the reader to verify the AI system cost input before relying on the figures.',
+    )
+  } else {
+    lines.push(`ROI: ${Math.round(financialOutputs.roiPercent)}%`)
+    lines.push(`Break-even: ${financialOutputs.breakEven}`)
+  }
   lines.push(`Reliability score: ${reliabilityScore}%`)
   lines.push('')
 

@@ -105,6 +105,9 @@ export interface FinancialOutputs {
   adjustedGain:     number
   netGain:          number
   roiPercent:       number
+  // True when roiPercent exceeds the sane ceiling. When set, the narrative
+  // prompt must not cite a literal ROI/break-even figure.
+  roiExceedsRange:  boolean
   breakEven:        string
   reliabilityScore: number
 }

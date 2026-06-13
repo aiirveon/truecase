@@ -44,12 +44,15 @@ const C = {
 // ─── Request body ─────────────────────────────────────────────────────────────
 
 interface FinancialOutputs {
-  projectedGain:  number
-  adjustedGain:   number
-  costOfInaction: number
-  netGain:        number
-  roiPercent:     number
-  breakEven:      string
+  projectedGain:   number
+  adjustedGain:    number
+  costOfInaction:  number
+  netGain:         number
+  roiPercent:      number
+  // True when roiPercent exceeds the sane ceiling — render an honest advisory
+  // for break-even instead of a runaway "1 month" figure.
+  roiExceedsRange: boolean
+  breakEven:       string
 }
 
 interface PDFRequest {
@@ -403,7 +406,7 @@ function TrueCasePDF({
 }: Omit<PDFRequest, 'useCase' | 'kbVersion' | 'kbVerifiedDate'>) {
   const sc   = getScoreColor(reliabilityScore)
   const scBg = getScoreBg(reliabilityScore)
-  const { projectedGain, adjustedGain, breakEven } = financialOutputs
+  const { projectedGain, adjustedGain, breakEven, roiExceedsRange } = financialOutputs
 
   return (
     <Document>
@@ -442,7 +445,11 @@ function TrueCasePDF({
           </View>
         </View>
 
-        <Text style={s.breakEven}>{breakEven} to break even</Text>
+        <Text style={s.breakEven}>
+          {roiExceedsRange
+            ? 'Break-even and ROI exceed the credible range — verify the AI system cost input.'
+            : `${breakEven} to break even`}
+        </Text>
       </Page>
 
       {/* ══ PAGE 2 — Governance Assessment ══════════════════════ */}

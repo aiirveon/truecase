@@ -56,15 +56,29 @@ export default function Home() {
   // ── Derived state ─────────────────────────────────────────────────────────
   const projection  = financialInputs ? calculate(financialInputs) : null
 
-  // Implausible-input guard: a near-zero AI system cost relative to the current
-  // annual cost is what produces runaway ROI (e.g. a £788 system against a £37M
-  // process → 4,772,507%). Block generation rather than emit a non-credible
-  // business case. Threshold: aiSystemCost must be at least 1% of currentAnnualCost.
+  // Implausible-input guard. Two independent triggers, because a low input ratio
+  // is not the only path to runaway ROI:
+  //
+  //  (a) systemCostTooLow — a near-zero AI system cost relative to the *current
+  //      annual cost* (e.g. a £788 system against a £37M process → 4,772,507%).
+  //      Threshold: aiSystemCost must be at least 1% of currentAnnualCost.
+  //
+  //  (b) roiImplausible — the *computed* ROI exceeds the sanity ceiling. This is
+  //      the authoritative backstop: it catches cases (a) misses entirely, such
+  //      as a large projectedGain driven by fineExposure (not currentAnnualCost)
+  //      against a small system cost — e.g. £90,968,230 gain at 1,350,980% ROI,
+  //      where aiSystemCost was still >1% of a modest currentAnnualCost so (a)
+  //      never fired. Gating on the output is what makes the guard sound.
+  //
+  // Either trigger disables the Generate button, so no pathological PDF or
+  // narrative can be produced in the first place.
   const MIN_SYSTEM_COST_RATIO = 0.01
-  const inputsImplausible =
+  const systemCostTooLow =
     financialInputs !== null &&
     financialInputs.currentAnnualCost > 0 &&
     financialInputs.aiSystemCost < MIN_SYSTEM_COST_RATIO * financialInputs.currentAnnualCost
+  const roiImplausible = projection?.roiExceedsRange ?? false
+  const inputsImplausible = systemCostTooLow || roiImplausible
 
   const canGenerate =
     hasCalculated && projection !== null && !isGenerating && !inputsImplausible
@@ -126,6 +140,7 @@ export default function Home() {
             adjustedGain,
             netGain:          projection.netGain,
             roiPercent:       projection.roiPercent,
+            roiExceedsRange:  projection.roiExceedsRange,
             breakEven:        formatBreakEven(projection),
             reliabilityScore,
           },
@@ -184,12 +199,13 @@ export default function Home() {
           section2:                  narrative.section2,
           section3:                  narrative.section3,
           financialOutputs: {
-            projectedGain:  projection.projectedGain,
+            projectedGain:   projection.projectedGain,
             adjustedGain,
-            costOfInaction: projection.costOfInaction,
-            netGain:        projection.netGain,
-            roiPercent:     projection.roiPercent,
-            breakEven:      formatBreakEven(projection),
+            costOfInaction:  projection.costOfInaction,
+            netGain:         projection.netGain,
+            roiPercent:      projection.roiPercent,
+            roiExceedsRange: projection.roiExceedsRange,
+            breakEven:       formatBreakEven(projection),
           },
           governanceElements,
           reliabilityScore,
@@ -297,17 +313,22 @@ export default function Home() {
             TrueCase stores nothing.
           </p>
 
-          {/* Implausible-input warning — shown when system cost is far too low */}
+          {/* Implausible-input warning — shown when the projection is not credible */}
           {hasCalculated && inputsImplausible && financialInputs && (
             <div className="rounded border border-score-low bg-score-low-bg px-4 py-3">
               <p className="text-xs font-medium text-score-low">
                 Check your inputs before generating
               </p>
               <p className="mt-1 text-xs text-foreground-muted leading-relaxed">
-                The AI system annual cost ({fmt(financialInputs.aiSystemCost)}) is less than 1%
-                of the current annual cost ({fmt(financialInputs.currentAnnualCost)}). That
-                produces an unrealistic ROI and an untrustworthy business case. Enter a realistic
-                system cost — typically 5–30% of the current process cost — to continue.
+                {systemCostTooLow
+                  ? `The AI system annual cost (${fmt(financialInputs.aiSystemCost)}) is less than 1% `
+                    + `of the current annual cost (${fmt(financialInputs.currentAnnualCost)}). That `
+                    + `produces an unrealistic ROI and an untrustworthy business case. Enter a realistic `
+                    + `system cost — typically 5–30% of the current process cost — to continue.`
+                  : `The projected return on investment exceeds the credible range. This usually means the `
+                    + `AI system cost (${fmt(financialInputs.aiSystemCost)}) is very low relative to the `
+                    + `value generated — often driven by a large fine-exposure figure. Re-check the system `
+                    + `cost and fine-exposure inputs so the business case stays trustworthy.`}
               </p>
             </div>
           )}
@@ -560,7 +581,9 @@ function buildHTMLReport({
           <p class="card-note" style="color:${sc}">At ${reliabilityScore}% reliability</p>
         </div>
       </div>
-      <p class="break-even">${projection.breakEvenValue > 0 ? Math.ceil(projection.breakEvenValue) + ' ' + projection.breakEvenUnit : '—'} to break even</p>
+      <p class="break-even">${projection.roiExceedsRange
+        ? 'Break-even and ROI exceed the credible range — verify the AI system cost input.'
+        : (projection.breakEvenValue > 0 ? Math.ceil(projection.breakEvenValue) + ' ' + projection.breakEvenUnit : '—') + ' to break even'}</p>
     </div>
 
     <div class="section">
