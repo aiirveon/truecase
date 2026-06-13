@@ -2,7 +2,7 @@
 **Tagline:** Build business cases you can actually trust.
 **Version:** 2.0
 **Owner:** Ogbebor Osaheni
-**Status:** Active development — Phase 2 (Knowledge Base rebuild)
+**Status:** v1 shipped — live at truecase-seven.vercel.app
 
 ---
 
@@ -351,8 +351,12 @@ Field 6: AI system annual cost £
   Benchmark hint: reads from benchmarks.json
 
 Calculations (universal formula):
+SOURCE OF TRUTH for the financial logic: docs/CALCULATION_METHODOLOGY.md
+(implemented in lib/calculations.ts). The summary below mirrors that document;
+if they ever diverge, the methodology doc and lib/calculations.ts win.
+
 Realised savings and avoided risk are kept SEPARATE — never blended, and only
-realised savings feed ROI/break-even. See docs/CALCULATION_METHODOLOGY.md.
+realised savings feed ROI/break-even.
 
 realisedSavings  = currentCost × (efficiencyGain/100)          ← money saved
 riskReduction    = fineExposure × (errorReduction/100) × 0.3   ← avoided risk (separate)
@@ -672,15 +676,15 @@ layout.tsx                    COMPLETE
 Route shells                  COMPLETE
 lib/governance-kb.json        COMPLETE
 lib/benchmarks.json           COMPLETE
-Guided input (4 questions)    NOT STARTED
-Governance gate rebuild       NOT STARTED
-Projection cards rebuild      NOT STARTED
-Claude API route rebuild      NOT STARTED
-PDF rebuild                   NOT STARTED
-HTML export rebuild           NOT STARTED
-/about page                   NOT STARTED
-Security checklist            NOT STARTED
-Vercel deploy                 NOT STARTED
+Guided input (4 questions)    COMPLETE
+Governance gate rebuild       COMPLETE
+Projection cards rebuild      COMPLETE
+Claude API route rebuild      COMPLETE
+PDF rebuild                   COMPLETE
+HTML export rebuild           COMPLETE
+/about page                   COMPLETE
+Security checklist            COMPLETE
+Vercel deploy                 COMPLETE
 
 ---
 
@@ -689,17 +693,17 @@ Vercel deploy                 NOT STARTED
 1.  tokens.css + tailwind.config.ts  [COMPLETE]
 2.  globals.css + layout.tsx         [COMPLETE]
 3.  Route shells                     [COMPLETE]
-4a. lib/governance-kb.json           ← NEXT
-4b. lib/benchmarks.json              ← THEN THIS
-4c. Guided input component (4 questions + summary)
-5.  Governance gate (reads from kb)
-6.  Projection output cards
-7.  Claude API route (constrained system prompt)
-8.  Narrative display + grounding disclosure
-9.  PDF API route (kb table in Section 2)
-10. HTML export + button pair
-11. /about page
-12. Security checklist + deploy
+4a. lib/governance-kb.json           [COMPLETE]
+4b. lib/benchmarks.json              [COMPLETE]
+4c. Guided input component (4 questions + summary)  [COMPLETE]
+5.  Governance gate (reads from kb)                 [COMPLETE]
+6.  Projection output cards                         [COMPLETE]
+7.  Claude API route (constrained system prompt)    [COMPLETE]
+8.  Narrative display + grounding disclosure        [COMPLETE]
+9.  PDF API route (kb table in Section 2)           [COMPLETE]
+10. HTML export + button pair                       [COMPLETE]
+11. /about page                                     [COMPLETE]
+12. Security checklist + deploy                      [COMPLETE]
 
 This file is the single source of truth.
 Every AI tool building this project reads from here.
